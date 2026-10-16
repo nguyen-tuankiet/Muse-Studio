@@ -1,0 +1,20 @@
+# Dữ liệu cục bộ: cookie Muse, token YouTube, video, hồ sơ trình duyệt (tuyệt đối không đưa lên git)
+data/
+
+# Thư viện và bản build có thể tạo lại
+node_modules/
+promo/output/
+
+# Biến môi trường riêng
+.env
+.env.*
+!.env.example
+
+# Hệ thống
+.DS_Store
+Thumbs.db
+*.log
+
+# Công cụ nội bộ của người phát triển (không đưa cho khách)
+promo/
+tests/

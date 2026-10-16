@@ -1,0 +1,16 @@
+{
+  "name": "museinsight",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Muse Studio: tạo video bằng Muse theo lịch, duyệt và đăng lên nhiều kênh YouTube",
+  "scripts": {
+    "start": "node server.js",
+    "setup": "npm --prefix web install && npm --prefix web run build",
+    "build": "npm --prefix web run build",
+    "dev:web": "npm --prefix web run dev",
+    "check": "node --check server.js && node --check lib/muse.js && node --check lib/youtube.js && node --check lib/ai.js"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

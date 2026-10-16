@@ -1,0 +1,5 @@
+html, body { margin: 0; }
+body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+video, img { max-width: 100%; }
+/* Thanh cuộn gọn trong khung bảng và menu */
+* { scrollbar-width: thin; }

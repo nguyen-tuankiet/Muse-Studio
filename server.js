@@ -1,3 +1,8 @@
+// Cần Node 22 trở lên (fetch và WebSocket có sẵn). Báo lỗi dễ hiểu thay vì lỗi khó đọc ở giữa chừng.
+if (Number(process.versions.node.split('.')[0]) < 22) {
+  console.error(`Muse Studio cần Node.js 22 trở lên, máy bạn đang dùng ${process.versions.node}. Tải bản LTS mới tại https://nodejs.org rồi chạy lại.`);
+  process.exit(1);
+}
 const http = require('http');
 const fs = require('fs');
 const path = require('path');

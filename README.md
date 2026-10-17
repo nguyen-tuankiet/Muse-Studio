@@ -19,21 +19,63 @@ Bấm vào ảnh để xem video demo (khoảng 1 phút 40 giây, dùng dữ li�
 
 | Thứ cần có | Ghi chú |
 |---|---|
-| **Node.js 22 trở lên** | Kiểm tra bằng `node -v`. Server dùng `fetch` và `WebSocket` có sẵn của Node 22. |
+| **Node.js 22 trở lên** | Hướng dẫn cài ở bên dưới. Server dùng `fetch` và `WebSocket` có sẵn của Node 22. |
 | **Google Chrome hoặc Microsoft Edge** | Tool điều khiển trình duyệt này để làm việc với muse.ai. Windows/macOS/Linux đều được. |
 | **Tài khoản Muse** | Đăng nhập được trên muse.ai. |
 | **Tài khoản Google quản lý kênh YouTube** | Và một Google OAuth client do bạn tự tạo (làm một lần, có hướng dẫn trong giao diện). |
 | Máy bật khi cần chạy lịch | Lịch chạy trên chính máy này. Nếu tắt máy đúng giờ chạy, lịch tự chạy bù khi bật lại trong cùng ngày. |
 
-## Chạy nhanh
+## Cài đặt và chạy (làm từng bước)
 
-```bash
-node server.js
-```
+### Bước 1. Cài Node.js (chỉ làm một lần)
 
-Mở **http://127.0.0.1:3000** (dùng đúng `127.0.0.1`, không dùng `localhost`, vì địa chỉ này khớp với cấu hình đăng nhập Google).
+1. Kiểm tra máy đã có chưa: nhấn phím **Windows**, gõ **cmd**, nhấn Enter để mở cửa sổ dòng lệnh, rồi gõ:
 
-Giao diện (React + Ant Design) đã được build sẵn trong `web/dist` nên chạy được ngay, không cần `npm install`. Chỉ khi sửa mã giao diện trong `web/src` mới cần build lại (xem mục **Phát triển**).
+   ```
+   node -v
+   ```
+
+   - Hiện số phiên bản từ **v22** trở lên (ví dụ `v22.15.0`): đã đủ, sang Bước 2.
+   - Hiện "node is not recognized" hoặc số nhỏ hơn 22: làm tiếp bước dưới.
+2. Mở https://nodejs.org, bấm nút tải bản **LTS** (nút màu xanh), chạy file vừa tải, bấm **Next** đến hết và giữ nguyên các lựa chọn mặc định.
+3. **Đóng cửa sổ cmd cũ, mở cửa sổ cmd mới** rồi gõ lại `node -v` để chắc chắn đã thấy số phiên bản.
+
+Cần thêm **Google Chrome** hoặc **Microsoft Edge** (Windows thường có sẵn Edge).
+
+### Bước 2. Tải mã nguồn về máy
+
+- Cách dễ nhất: trên trang GitHub của dự án, bấm nút xanh **Code → Download ZIP**, rồi chuột phải file ZIP → **Extract All** (giải nén) vào một thư mục cố định, ví dụ `C:MuseStudio`.
+- Hoặc nếu có Git: `git clone <địa chỉ-repo> C:MuseStudio`
+
+Thư mục sau khi giải nén phải chứa trực tiếp file `server.js` và `Start.bat` (nếu thấy thêm một thư mục con trùng tên bên trong, hãy mở vào thư mục con đó).
+
+### Bước 3. Chạy
+
+**Cách A: bấm đúp (dễ nhất, chỉ Windows).** Bấm đúp file **`Start.bat`** trong thư mục. Một cửa sổ đen hiện lên, vài giây sau trình duyệt tự mở trang Muse Studio. Nếu chưa cài Node, file sẽ tự mở trang tải Node.js cho bạn.
+
+**Cách B: gõ lệnh (mọi hệ điều hành).**
+
+1. Mở thư mục chứa `server.js` trong File Explorer, bấm vào **thanh địa chỉ** phía trên, gõ `cmd` rồi nhấn Enter. Cửa sổ cmd sẽ mở sẵn đúng thư mục đó. (Hoặc mở cmd rồi gõ `cd /d C:MuseStudio`.)
+2. Gõ lệnh:
+
+   ```
+   node server.js
+   ```
+
+3. Khi thấy dòng `Muse Studio chạy tại http://127.0.0.1:3000`, mở trình duyệt vào địa chỉ **http://127.0.0.1:3000** (gõ đúng `127.0.0.1`, không dùng `localhost`, vì địa chỉ này khớp với cấu hình đăng nhập Google).
+
+Nếu chữ tiếng Việt trong cửa sổ cmd bị lỗi font (ký tự lạ), gõ `chcp 65001` rồi Enter trước khi chạy `node server.js`. Việc này không ảnh hưởng tới hoạt động của tool.
+
+Trên Mac/Linux: mở Terminal, gõ `cd` tới thư mục dự án rồi chạy `node server.js`.
+
+### Bật, tắt và mở lại
+
+- **Phải để cửa sổ đen (cmd) mở** trong lúc dùng và khi chờ lịch tự chạy. Đóng cửa sổ đó là tắt tool. Có thể thu nhỏ nó xuống thanh taskbar.
+- **Tắt tool:** bấm vào cửa sổ đen rồi nhấn **Ctrl + C** (hoặc đóng cửa sổ).
+- **Mở lại lần sau:** bấm đúp `Start.bat` (hoặc mở cmd trong thư mục rồi gõ lại `node server.js`). Dữ liệu, cookie và kênh đã kết nối được giữ nguyên, không phải thiết lập lại.
+- **Muốn tool tự chạy khi bật máy:** nhấn **Windows + R**, gõ `shell:startup`, Enter, rồi kéo một **shortcut** của `Start.bat` (chuột phải → Create shortcut) vào thư mục vừa mở.
+- **Lịch tự động chỉ chạy khi máy đang bật** và cửa sổ đen đang mở. Nếu máy tắt đúng giờ chạy, lịch tự chạy bù khi bạn bật lại trong cùng ngày.
+- **Cập nhật phiên bản mới:** tải ZIP mới, giải nén đè lên thư mục cũ nhưng **giữ lại thư mục `data`** (đây là nơi lưu mọi dữ liệu của bạn).
 
 ## Thiết lập lần đầu (khoảng 10 phút)
 
@@ -105,6 +147,7 @@ Mặc định video do lịch tạo vẫn chờ bạn duyệt; có thể chọn 
 
 | Đường dẫn | Nội dung |
 |---|---|
+| `Start.bat` | Bấm đúp để chạy trên Windows |
 | `server.js` | HTTP server, API, hàng đợi, bộ lập lịch, đồng bộ số liệu YouTube |
 | `lib/muse.js` | Điều khiển Chrome/Edge qua CDP để tạo video và chat với Muse |
 | `lib/youtube.js` | OAuth nhiều kênh, upload, thống kê, theo dõi quota |
@@ -149,4 +192,7 @@ npm run check     # kiểm tra cú pháp phần server
 | Kết nối YouTube báo `redirect_uri_mismatch` | Redirect URI trong Google Cloud phải khớp từng ký tự (http, 127.0.0.1, đúng cổng) |
 | Kênh báo "Cần kết nối lại" | Token YouTube hết hạn hoặc bị thu hồi: bấm **Kết nối lại** |
 | Lịch không chạy | Máy phải bật, có cookie Muse và kênh đã kết nối YouTube; xem dòng lỗi dưới tên lịch |
-| Cổng 3000 bị chiếm | Chạy `PORT=3100 node server.js` (PowerShell: `$env:PORT=3100; node server.js`) và đổi redirect URI tương ứng |
+| Cổng 3000 bị chiếm (báo `EADDRINUSE`) | Tool đang chạy ở một cửa sổ khác, hãy đóng cửa sổ đó. Hoặc dùng cổng khác: trong cmd gõ `set PORT=3100` rồi `node server.js` (PowerShell: `$env:PORT=3100; node server.js`) và đổi redirect URI trong Google Cloud tương ứng |
+| `'node' is not recognized` | Chưa cài Node.js, hoặc cài xong chưa mở lại cmd. Làm lại Bước 1 |
+| Bấm `Start.bat` thấy cửa sổ đen chớp rồi tắt | Mở cmd trong thư mục, gõ `node server.js` để xem thông báo lỗi |
+| Báo cần Node 22 | Tải bản LTS mới nhất tại nodejs.org rồi chạy lại |

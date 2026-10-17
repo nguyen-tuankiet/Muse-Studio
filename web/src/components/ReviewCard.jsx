@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
-import { Button, Card, Col, DatePicker, Empty, Flex, Form, Input, Popconfirm, Row, Select, Tag } from 'antd';
+import { Button, Card, Col, DatePicker, Empty, Flex, Form, Input, Popconfirm, Row, Select, Tag, Typography } from 'antd';
 import { CheckOutlined, ClockCircleOutlined, CloseOutlined, ReloadOutlined, YoutubeOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { api } from '../api.js';
 import { privacyOptions } from '../constants.js';
 import { useApp, useRun } from '../store.jsx';
-import { MediaView } from './common.jsx';
 import AiSuggest from './AiSuggest.jsx';
+
+// Khung xem video: cao đúng bằng video (tối đa 520px), không kéo dãn theo biểu mẫu bên cạnh nên không thừa phần đen.
+function ReviewMedia({ asset }) {
+  const url = asset.url || `/media/${asset.storageKey}`;
+  const frame = { width: '100%', maxHeight: 520, display: 'block', borderRadius: 12, background: '#0b0f19', objectFit: 'contain' };
+  return String(asset.mimeType).startsWith('video/') ? <video src={url} controls preload="metadata" style={frame} /> : <img src={url} alt="" style={frame} />;
+}
 
 // Thẻ duyệt một video trước khi đăng lên YouTube.
 export default function ReviewCard({ post }) {
@@ -21,7 +27,17 @@ export default function ReviewCard({ post }) {
   return (
     <Card styles={{ body: { padding: 0 } }} style={{ overflow: 'hidden' }}>
       <Row>
-        <Col xs={24} md={9} style={{ background: '#0b0f19' }}>{asset ? <MediaView asset={asset} height={320} /> : <Empty style={{ padding: 40 }} description="Không còn file video" />}</Col>
+        <Col xs={24} md={9}>
+          <div style={{ padding: 20 }}>
+            {asset ? <ReviewMedia asset={asset} /> : <Empty style={{ padding: 40 }} description="Không còn file video" />}
+            {asset?.prompt && (
+              <div style={{ marginTop: 16 }}>
+                <Typography.Text type="secondary" style={{ fontSize: 13 }}>Prompt tạo video</Typography.Text>
+                <Typography.Paragraph style={{ margin: '4px 0 0' }} ellipsis={{ rows: 4, expandable: 'collapsible' }}>{asset.prompt}</Typography.Paragraph>
+              </div>
+            )}
+          </div>
+        </Col>
         <Col xs={24} md={15}>
           <Form form={form} layout="vertical" requiredMark={false} onFinish={approve} style={{ padding: 24 }}
             initialValues={{ title: post.title, description: post.description, tags: post.tags || [], privacy: post.privacy, publishAt: post.suggestedPublishAt ? dayjs(post.suggestedPublishAt) : null }}>

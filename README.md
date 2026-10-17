@@ -51,7 +51,7 @@ Thư mục sau khi giải nén phải chứa trực tiếp file `server.js` và 
 
 ### Bước 3. Chạy
 
-**Cách A: bấm đúp (dễ nhất, chỉ Windows).** Bấm đúp file **`Start.bat`** trong thư mục. Một cửa sổ đen hiện lên, vài giây sau trình duyệt tự mở trang Muse Studio. Nếu chưa cài Node, file sẽ tự mở trang tải Node.js cho bạn.
+**Cách A: bấm đúp (dễ nhất, chỉ Windows).** Bấm đúp file **`Start.bat`**. Tool chạy **nền, không hiện cửa sổ đen**; vài giây sau trình duyệt tự mở trang Muse Studio. Nếu chưa cài Node, file sẽ tự mở trang tải Node.js cho bạn. Bấm đúp `Start.bat` lần nữa khi tool đang chạy thì chỉ mở lại trang, không chạy trùng.
 
 **Cách B: gõ lệnh (mọi hệ điều hành).**
 
@@ -70,12 +70,12 @@ Trên Mac/Linux: mở Terminal, gõ `cd` tới thư mục dự án rồi chạy 
 
 ### Bật, tắt và mở lại
 
-- **Phải để cửa sổ đen (cmd) mở** trong lúc dùng và khi chờ lịch tự chạy. Đóng cửa sổ đó là tắt tool. Có thể thu nhỏ nó xuống thanh taskbar.
-- **Tắt tool:** bấm vào cửa sổ đen rồi nhấn **Ctrl + C** (hoặc đóng cửa sổ).
-- **Mở lại lần sau:** bấm đúp `Start.bat` (hoặc mở cmd trong thư mục rồi gõ lại `node server.js`). Dữ liệu, cookie và kênh đã kết nối được giữ nguyên, không phải thiết lập lại.
-- **Muốn tool tự chạy khi bật máy:** nhấn **Windows + R**, gõ `shell:startup`, Enter, rồi kéo một **shortcut** của `Start.bat` (chuột phải → Create shortcut) vào thư mục vừa mở.
-- **Lịch tự động chỉ chạy khi máy đang bật** và cửa sổ đen đang mở. Nếu máy tắt đúng giờ chạy, lịch tự chạy bù khi bạn bật lại trong cùng ngày.
-- **Cập nhật phiên bản mới:** tải ZIP mới, giải nén đè lên thư mục cũ nhưng **giữ lại thư mục `data`** (đây là nơi lưu mọi dữ liệu của bạn).
+- **Tắt tool:** bấm đúp **`Stop.bat`**. File này tắt tool đang chạy nền và đóng luôn trình duyệt Chrome/Edge mà tool đã mở. (Nếu chạy bằng cách B ở trên thì bấm vào cửa sổ cmd rồi nhấn **Ctrl + C**.)
+- **Mở lại lần sau:** bấm đúp `Start.bat`. Dữ liệu, cookie và kênh đã kết nối được giữ nguyên, không phải thiết lập lại.
+- **Muốn tool tự chạy khi bật máy:** nhấn **Windows + R**, gõ `shell:startup`, Enter, rồi kéo một **shortcut** của `Start.bat` (chuột phải → Create shortcut) vào thư mục vừa mở. Tool sẽ chạy nền, không hiện cửa sổ.
+- **Lịch tự động chỉ chạy khi máy đang bật** và tool đang chạy. Nếu máy tắt đúng giờ chạy, lịch tự chạy bù khi bạn bật lại trong cùng ngày.
+- **Khi có lỗi:** tool chạy nền nên không thấy thông báo lỗi trên màn hình. Mở file `data\server-error.log` (lỗi) và `data\server.log` (nhật ký) để xem.
+- **Cập nhật phiên bản mới:** chạy `Stop.bat`, tải ZIP mới, giải nén đè lên thư mục cũ nhưng **giữ lại thư mục `data`** (nơi lưu mọi dữ liệu của bạn), rồi chạy lại `Start.bat`.
 
 ## Thiết lập lần đầu (khoảng 10 phút)
 
@@ -147,7 +147,7 @@ Mặc định video do lịch tạo vẫn chờ bạn duyệt; có thể chọn 
 
 | Đường dẫn | Nội dung |
 |---|---|
-| `Start.bat` | Bấm đúp để chạy trên Windows |
+| `Start.bat`, `Stop.bat` | Bấm đúp để bật (chạy nền) / tắt trên Windows |
 | `server.js` | HTTP server, API, hàng đợi, bộ lập lịch, đồng bộ số liệu YouTube |
 | `lib/muse.js` | Điều khiển Chrome/Edge qua CDP để tạo video và chat với Muse |
 | `lib/youtube.js` | OAuth nhiều kênh, upload, thống kê, theo dõi quota |
@@ -194,5 +194,6 @@ npm run check     # kiểm tra cú pháp phần server
 | Lịch không chạy | Máy phải bật, có cookie Muse và kênh đã kết nối YouTube; xem dòng lỗi dưới tên lịch |
 | Cổng 3000 bị chiếm (báo `EADDRINUSE`) | Tool đang chạy ở một cửa sổ khác, hãy đóng cửa sổ đó. Hoặc dùng cổng khác: trong cmd gõ `set PORT=3100` rồi `node server.js` (PowerShell: `$env:PORT=3100; node server.js`) và đổi redirect URI trong Google Cloud tương ứng |
 | `'node' is not recognized` | Chưa cài Node.js, hoặc cài xong chưa mở lại cmd. Làm lại Bước 1 |
-| Bấm `Start.bat` thấy cửa sổ đen chớp rồi tắt | Mở cmd trong thư mục, gõ `node server.js` để xem thông báo lỗi |
+| Bấm `Start.bat` mà trình duyệt không mở được trang | Mở file `data\server-error.log` xem lỗi, hoặc mở cmd trong thư mục rồi gõ `node server.js` để thấy lỗi trực tiếp |
+| Muốn đổi cổng khi dùng `Start.bat`/`Stop.bat` | Đặt biến `PORT` (ví dụ `set PORT=3100`) trước khi bấm, hoặc chạy hai file này từ cmd |
 | Báo cần Node 22 | Tải bản LTS mới nhất tại nodejs.org rồi chạy lại |

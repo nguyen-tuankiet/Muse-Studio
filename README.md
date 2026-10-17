@@ -44,8 +44,8 @@ Cần thêm **Google Chrome** hoặc **Microsoft Edge** (Windows thường có s
 
 ### Bước 2. Tải mã nguồn về máy
 
-- Cách dễ nhất: trên trang GitHub của dự án, bấm nút xanh **Code → Download ZIP**, rồi chuột phải file ZIP → **Extract All** (giải nén) vào một thư mục cố định, ví dụ `C:MuseStudio`.
-- Hoặc nếu có Git: `git clone <địa chỉ-repo> C:MuseStudio`
+- Cách dễ nhất: trên trang GitHub của dự án, bấm nút xanh **Code → Download ZIP**, rồi chuột phải file ZIP → **Extract All** (giải nén) vào một thư mục cố định, ví dụ `C:\MuseStudio`.
+- Hoặc nếu có Git: `git clone <địa chỉ-repo> C:\MuseStudio`
 
 Thư mục sau khi giải nén phải chứa trực tiếp file `server.js` và `Start.bat` (nếu thấy thêm một thư mục con trùng tên bên trong, hãy mở vào thư mục con đó).
 
@@ -55,7 +55,7 @@ Thư mục sau khi giải nén phải chứa trực tiếp file `server.js` và 
 
 **Cách B: gõ lệnh (mọi hệ điều hành).**
 
-1. Mở thư mục chứa `server.js` trong File Explorer, bấm vào **thanh địa chỉ** phía trên, gõ `cmd` rồi nhấn Enter. Cửa sổ cmd sẽ mở sẵn đúng thư mục đó. (Hoặc mở cmd rồi gõ `cd /d C:MuseStudio`.)
+1. Mở thư mục chứa `server.js` trong File Explorer, bấm vào **thanh địa chỉ** phía trên, gõ `cmd` rồi nhấn Enter. Cửa sổ cmd sẽ mở sẵn đúng thư mục đó. (Hoặc mở cmd rồi gõ `cd /d C:\MuseStudio`.)
 2. Gõ lệnh:
 
    ```

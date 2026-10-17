@@ -174,7 +174,7 @@ function body(req) {
     req.on('end', () => {
       if (tooLarge) return;
       if (!raw) return resolve({});
-      try { resolve(JSON.parse(raw)); } catch { resolve({ raw }); }
+      try { const value = JSON.parse(raw); resolve(value && typeof value === 'object' && !Array.isArray(value) ? value : {}); } catch { resolve({ raw }); }
     });
     req.on('error', reject);
   });
@@ -661,6 +661,7 @@ async function handleApi(req, res, parsed) {
       const duration = Number.isInteger(input.duration) && input.duration >= 1 && input.duration <= 60 ? input.duration : brief.duration;
       return createJob(prompt, { type, channelId: channel?.id || null, size: sizes.includes(input.size) ? input.size : brief.size, duration: type === 'video' ? duration || null : null });
     });
+    if (!jobs.length) return fail(res, 404, 'Không tìm thấy prompt nào trong danh sách đã chọn.', 'not_found');
     store.jobs = [...jobs, ...store.jobs]; persist(); emit('batch.created', { count: jobs.length, jobIds: jobs.map((job) => job.id) }); processQueue().catch((error) => console.error(error));
     return json(res, 201, { data: { batchId: id('batch'), count: jobs.length, jobs: jobs.map(publicJob) } });
   }

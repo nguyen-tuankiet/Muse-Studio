@@ -113,7 +113,7 @@ function PromptsTab({ channel }) {
       {!hasBrief && <Alert type="info" showIcon style={{ marginBottom: 16 }} message="Muse cần biết kênh nói về gì để gợi ý prompt" action={<Button size="small" onClick={() => navigate(`/channel/${channel.id}`, { tab: 'brief' })}>Điền hồ sơ kênh</Button>} />}
       {hasBrief && !hasCookie && <Alert type="warning" showIcon style={{ marginBottom: 16 }} message="Chưa có cookie Muse nên chưa gợi ý hoặc tạo video được" action={<Button size="small" onClick={() => navigate('/settings')}>Mở cài đặt</Button>} />}
       <Flex wrap gap={12} justify="space-between" align="center" style={{ marginBottom: 16 }}>
-        <Segmented size="large" value={filter} onChange={setFilter} options={[{ value: 'ALL', label: `Tất cả ${prompts.length}` }, { value: 'DRAFT', label: `Chờ duyệt ${counts.DRAFT}` }, { value: 'APPROVED', label: `Đã duyệt ${counts.APPROVED}` }, { value: 'USED', label: `Đã dùng ${counts.USED}` }]} />
+        <div style={{ maxWidth: '100%', overflowX: 'auto' }}><Segmented size="large" value={filter} onChange={setFilter} options={[{ value: 'ALL', label: `Tất cả ${prompts.length}` }, { value: 'DRAFT', label: `Chờ duyệt ${counts.DRAFT}` }, { value: 'APPROVED', label: `Đã duyệt ${counts.APPROVED}` }, { value: 'USED', label: `Đã dùng ${counts.USED}` }]} /></div>
         <Space wrap>
           <Button size="large" type="primary" icon={<RobotOutlined />} disabled={!hasBrief || !hasCookie} onClick={() => setModal({ kind: 'ideas' })}>Muse gợi ý prompt</Button>
           <Button size="large" icon={<PlusOutlined />} onClick={() => setModal({ kind: 'prompt' })}>Thêm</Button>

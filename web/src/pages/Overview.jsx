@@ -222,7 +222,7 @@ export default function Overview() {
                 <List.Item style={{ padding: '10px 0' }} extra={<JobTag status={job.status} />}>
                   <List.Item.Meta
                     avatar={job.status === 'COMPLETED' ? <CheckCircleOutlined style={{ color: 'var(--ant-color-success)', fontSize: 22 }} /> : <ThunderboltOutlined style={{ color: 'var(--ant-color-text-tertiary)', fontSize: 22 }} />}
-                    title={<Typography.Text ellipsis style={{ maxWidth: 420 }}>{job.prompt}</Typography.Text>}
+                    title={<Typography.Text ellipsis style={{ maxWidth: '100%', display: 'block' }}>{job.prompt}</Typography.Text>}
                     description={<>{job.type === 'video' ? 'Video' : 'Ảnh'} · {job.project} · {fromNow(job.createdAt)}{['SUBMITTED', 'GENERATING'].includes(job.status) && job.progress > 0 && <Progress percent={Math.round(job.progress)} size="small" style={{ maxWidth: 260, marginBottom: 0 }} />}</>}
                   />
                 </List.Item>

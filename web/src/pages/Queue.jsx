@@ -62,8 +62,8 @@ export default function Queue() {
     <>
       <PageHeader title="Hàng đợi" subtitle="Theo dõi từng job tạo video/ảnh. Cập nhật theo thời gian thực."
         extra={<Badge status={worker ? 'processing' : 'default'} text={<Typography.Text>{worker ? 'Đang tạo' : 'Rảnh'}</Typography.Text>} />} />
-      <Segmented size="large" value={filter} onChange={setFilter} style={{ marginBottom: 16 }}
-        options={FILTERS.map((item) => ({ value: item.value, label: counts[item.value] ? `${item.label} (${counts[item.value]})` : item.label }))} />
+      <div style={{ maxWidth: '100%', overflowX: 'auto', marginBottom: 16 }}><Segmented size="large" value={filter} onChange={setFilter}
+        options={FILTERS.map((item) => ({ value: item.value, label: counts[item.value] ? `${item.label} (${counts[item.value]})` : item.label }))} /></div>
       <Table rowKey="id" columns={columns} dataSource={rows} scroll={{ x: 720 }} pagination={rows.length > 15 ? { pageSize: 15, showSizeChanger: false } : false}
         locale={{ emptyText: <Empty description="Không có job nào" style={{ padding: '32px 0' }} /> }} />
       <Modal open={Boolean(preview)} onCancel={() => setPreview(null)} footer={null} width={720} centered destroyOnClose title={preview ? preview.prompt : ''}>

@@ -11,6 +11,8 @@ window.SITE = {
   note: 'Miễn phí dùng thử. Chạy trên máy của bạn, dữ liệu không rời khỏi máy.',
   // Tên hiển thị ở chân trang.
   author: 'Nguyễn Tuấn Kiệt',
+  // Link khi bấm vào tên tác giả.
+  authorUrl: 'https://github.com/nguyen-tuankiet',
   // Biểu tượng mạng xã hội ở chân trang: điền link thì hiện, để rỗng thì ẩn. email: điền địa chỉ email hoặc mailto:...
   socials: { youtube: '', discord: '', email: '' },
 };

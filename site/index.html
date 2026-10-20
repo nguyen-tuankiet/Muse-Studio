@@ -159,7 +159,8 @@ footer { padding: 56px 0 40px; color: var(--muted); font-size: .98rem; }
 .f-col a { display: block; padding: 6px 0; color: var(--muted); text-decoration: none; transition: color .2s, transform .2s; }
 .f-col a:hover { color: var(--brand); transform: translateX(4px); }
 .f-bottom { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 44px; padding-top: 24px; border-top: 1px solid var(--line); font-size: .93rem; }
-.f-bottom b { color: var(--brand); }
+.f-bottom a.js-author { color: var(--brand); font-weight: 700; text-decoration: none; background: linear-gradient(currentColor, currentColor) 0 100% / 0 2px no-repeat; transition: background-size .25s; }
+.f-bottom a.js-author:hover { background-size: 100% 2px; }
 .f-bottom svg { width: 16px; height: 16px; vertical-align: -3px; margin-left: 4px; color: var(--brand); }
 @media (max-width: 960px) { .f-grid { grid-template-columns: 1fr 1fr; } .f-brand { grid-column: 1 / -1; } .spark { display: none; } }
 @media (max-width: 520px) { .f-grid { grid-template-columns: 1fr; } .cta-panel { padding: 44px 18px; } }
@@ -403,7 +404,7 @@ footer { padding: 56px 0 40px; color: var(--muted); font-size: .98rem; }
     </div>
     <div class="f-bottom">
       <span>© <span id="year">2026</span> Muse Studio. Công cụ cá nhân, không liên kết với Muse hay YouTube.</span>
-      <span>Được phát triển bởi <b class="js-author">Nguyễn Tuấn Kiệt</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></span>
+      <span>Được phát triển bởi <a class="js-author" href="https://github.com/nguyen-tuankiet" target="_blank" rel="noreferrer">Nguyễn Tuấn Kiệt</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></span>
     </div>
   </div>
 </footer>
@@ -426,7 +427,7 @@ footer { padding: 56px 0 40px; color: var(--muted); font-size: .98rem; }
     el.hidden = false; el.href = cfg.contactUrl; el.target = '_blank'; el.rel = 'noreferrer'; el.textContent = cfg.contactLabel || 'Liên hệ';
   });
   document.getElementById('year').textContent = new Date().getFullYear();
-  document.querySelectorAll('.js-author').forEach(function (el) { if (cfg.author) el.textContent = cfg.author; });
+  document.querySelectorAll('.js-author').forEach(function (el) { if (cfg.author) el.textContent = cfg.author; if (cfg.authorUrl) el.href = cfg.authorUrl; });
   var socials = cfg.socials || {};
   document.querySelectorAll('[data-social]').forEach(function (el) {
     var url = socials[el.getAttribute('data-social')];

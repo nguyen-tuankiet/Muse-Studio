@@ -10,7 +10,9 @@ const root = path.resolve(site, '..');
 const dist = path.join(site, 'dist');
 const version = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8')).version;
 
-fs.rmSync(dist, { recursive: true, force: true });
+// Xóa nội dung cũ nhưng giữ lại .git (nếu bạn dùng thư mục dist làm repo riêng để deploy)
+fs.mkdirSync(dist, { recursive: true });
+for (const entry of fs.readdirSync(dist)) if (entry !== '.git') fs.rmSync(path.join(dist, entry), { recursive: true, force: true });
 fs.mkdirSync(path.join(dist, 'assets'), { recursive: true });
 fs.mkdirSync(path.join(dist, 'downloads'), { recursive: true });
 

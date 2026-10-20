@@ -14,7 +14,7 @@ fs.rmSync(dist, { recursive: true, force: true });
 fs.mkdirSync(path.join(dist, 'assets'), { recursive: true });
 fs.mkdirSync(path.join(dist, 'downloads'), { recursive: true });
 
-for (const file of ['index.html', 'site.config.js']) fs.copyFileSync(path.join(site, file), path.join(dist, file));
+for (const file of ['index.html', 'site.config.js', 'effects.css', 'effects.js']) fs.copyFileSync(path.join(site, file), path.join(dist, file));
 for (const file of fs.readdirSync(path.join(site, 'assets'))) fs.copyFileSync(path.join(site, 'assets', file), path.join(dist, 'assets', file));
 for (const file of ['demo.mp4', 'demo-poster.jpg']) fs.copyFileSync(path.join(root, 'docs', file), path.join(dist, 'assets', file));
 

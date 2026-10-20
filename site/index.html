@@ -17,6 +17,7 @@
 }
 :root[data-theme="dark"] { --bg: #0b1020; --surface: #121a2e; --ink: #eef2fb; --muted: #9aa8c4; --line: #1f2a44; --brand: #4f8cff; --brand-ink: #071024; --brand-soft: #16264a; --shadow: 0 24px 60px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.07); }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html { scroll-behavior: smooth; scroll-padding-top: 76px; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.65 "Segoe UI", Inter, -apple-system, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; }
 img, video { max-width: 100%; display: block; }
@@ -134,11 +135,34 @@ summary::after { content: "+"; color: var(--brand); font-size: 1.4rem; line-heig
 details[open] summary::after { content: "–"; }
 details p { color: var(--muted); padding: 0 0 18px; }
 
-.final { text-align: center; }
-.final .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 28px; }
-footer { padding: 36px 0 60px; border-top: 1px solid var(--line); color: var(--muted); font-size: .93rem; }
-footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-
+.final { padding-bottom: 40px; }
+.cta-panel { position: relative; overflow: hidden; text-align: center; padding: 64px 24px; border-radius: 28px; border: 1px solid var(--line); background: linear-gradient(135deg, var(--brand-soft), var(--surface)); isolation: isolate; }
+.cta-panel::before, .cta-panel::after { content: ""; position: absolute; border-radius: 50%; background: var(--brand-soft); z-index: -1; opacity: .9; }
+.cta-panel::before { width: 360px; height: 360px; left: -110px; bottom: -190px; }
+.cta-panel::after { width: 300px; height: 300px; right: -90px; top: -150px; }
+.cta-panel h2 { position: relative; display: inline-block; font-size: clamp(1.8rem, 4vw, 2.6rem); }
+.spark { position: absolute; left: -46px; top: -22px; width: 38px; height: 38px; color: var(--brand); }
+.cta-panel .lead { margin: 14px auto 0; }
+.cta-panel .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
+.cta-panel .btn-primary { padding: 17px 36px; font-size: 1.1rem; border-radius: 16px; }
+.cta-panel .btn svg { width: 20px; height: 20px; }
+footer { padding: 56px 0 40px; color: var(--muted); font-size: .98rem; }
+.f-grid { display: grid; grid-template-columns: 1.5fr repeat(4, 1fr); gap: 36px; }
+.f-brand .brand { margin-bottom: 14px; }
+.f-brand p { max-width: 300px; line-height: 1.7; }
+.socials { display: flex; gap: 12px; margin-top: 20px; }
+.socials a { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--brand-soft); color: var(--brand); transition: transform .25s, background .25s, color .25s; }
+.socials a:hover { transform: translateY(-4px); background: var(--brand); color: var(--brand-ink); }
+.socials svg { width: 20px; height: 20px; }
+.f-col h4 { display: flex; align-items: center; gap: 10px; margin: 0 0 16px; color: var(--ink); font-size: 1.02rem; }
+.f-col h4 svg { width: 22px; height: 22px; color: var(--brand); flex: none; }
+.f-col a { display: block; padding: 6px 0; color: var(--muted); text-decoration: none; transition: color .2s, transform .2s; }
+.f-col a:hover { color: var(--brand); transform: translateX(4px); }
+.f-bottom { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 44px; padding-top: 24px; border-top: 1px solid var(--line); font-size: .93rem; }
+.f-bottom b { color: var(--brand); }
+.f-bottom svg { width: 16px; height: 16px; vertical-align: -3px; margin-left: 4px; color: var(--brand); }
+@media (max-width: 960px) { .f-grid { grid-template-columns: 1fr 1fr; } .f-brand { grid-column: 1 / -1; } .spark { display: none; } }
+@media (max-width: 520px) { .f-grid { grid-template-columns: 1fr; } .cta-panel { padding: 44px 18px; } }
 @media (max-width: 960px) {
   .features, .steps { grid-template-columns: 1fr 1fr; }
   .row, .row.flip, .install { grid-template-columns: 1fr; gap: 28px; }
@@ -226,7 +250,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
     <div class="wrap">
       <div class="row">
         <div class="text">
-          <span class="eyebrow">Hồ sơ kênh</span>
+          <span class="eyebrow" id="ho-so">Hồ sơ kênh</span>
           <h2>Dạy Muse hiểu kênh của bạn</h2>
           <p class="muted">Điền chủ đề một lần, mọi video sau đó đi đúng hướng.</p>
           <ul class="ticks"><li>Ngách, chủ đề, đối tượng người xem, giọng điệu</li><li>Điều cần tránh trong nội dung</li><li>Khung hình và thời lượng mặc định (ví dụ Shorts 9:16)</li></ul>
@@ -236,7 +260,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
       <div class="row flip">
         <div class="shot"><div class="bar"><i></i><i></i><i></i></div><img loading="lazy" src="assets/prompts.jpg" alt="Danh sách prompt" width="1600" height="1000"></div>
         <div class="text">
-          <span class="eyebrow">Prompt</span>
+          <span class="eyebrow" id="prompt">Prompt</span>
           <h2>Muse gợi ý, bạn quyết định</h2>
           <p class="muted">Prompt do Muse sinh luôn ở trạng thái chờ duyệt: không có gì được tạo khi bạn chưa đồng ý.</p>
           <ul class="ticks"><li>Gợi ý 1–10 prompt mỗi lần, kèm yêu cầu riêng</li><li>Sửa nội dung, duyệt hoặc xóa hàng loạt</li><li>Tạo video từ các prompt đã chọn chỉ với một cú bấm</li></ul>
@@ -244,7 +268,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
       </div>
       <div class="row">
         <div class="text">
-          <span class="eyebrow">Lịch tự động</span>
+          <span class="eyebrow" id="lich-tu-dong">Lịch tự động</span>
           <h2>Đặt một lần, chạy mỗi ngày</h2>
           <p class="muted">Chọn nguồn nội dung phù hợp với cách làm của bạn.</p>
           <ul class="ticks"><li><b>Muse tự nghĩ mỗi ngày:</b> không cần chuẩn bị gì</li><li><b>Prompt đã duyệt:</b> lấy lần lượt, có thể tự sinh thêm khi hết</li><li><b>Video có sẵn:</b> chọn nhiều video, mỗi ngày đăng một video</li></ul>
@@ -254,7 +278,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
       <div class="row flip">
         <div class="shot"><div class="bar"><i></i><i></i><i></i></div><img loading="lazy" src="assets/review.jpg" alt="Duyệt video trước khi đăng" width="1600" height="1000"></div>
         <div class="text">
-          <span class="eyebrow">Chờ duyệt</span>
+          <span class="eyebrow" id="cho-duyet">Chờ duyệt</span>
           <h2>Xem lại rồi mới đăng</h2>
           <p class="muted">Một hộp thư duy nhất cho mọi prompt và video đang chờ bạn.</p>
           <ul class="ticks"><li>Tiêu đề, mô tả, tag đã điền sẵn bằng Muse</li><li>Hẹn giờ đăng công khai hoặc đăng ngay</li><li>Từ chối và tạo lại chỉ khi bạn bấm</li></ul>
@@ -348,11 +372,13 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
 
   <section class="final">
     <div class="wrap">
-      <h2>Sẵn sàng để kênh tự chạy?</h2>
-      <p class="lead" style="margin:12px auto 0">Tải về, cài trong 10 phút và đặt lịch cho video đầu tiên.</p>
-      <div class="cta">
-        <a class="btn btn-primary js-download" href="#cai-dat">Tải về ngay</a>
-        <a class="btn btn-ghost js-contact" href="#" hidden></a>
+      <div class="cta-panel">
+        <h2><svg class="spark" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" aria-hidden="true"><path d="M8 22l-4-1M14 12l-3-4M26 8l1-5"/></svg>Sẵn sàng để kênh tự chạy?</h2>
+        <p class="lead">Tải về, cài trong 10 phút và đặt lịch cho video đầu tiên.</p>
+        <div class="cta">
+          <a class="btn btn-primary js-download" href="#cai-dat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>Tải về ngay<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn btn-ghost js-contact" href="#" hidden></a>
+        </div>
       </div>
     </div>
   </section>
@@ -360,8 +386,25 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
 
 <footer>
   <div class="wrap">
-    <span>© Muse Studio. Công cụ cá nhân, không liên kết với Muse hay YouTube.</span>
-    <span>YouTube là nhãn hiệu của Google LLC.</span>
+    <div class="f-grid">
+      <div class="f-brand">
+        <a class="brand" href="#top"><svg width="40" height="40" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#2563eb"/><path d="M9 22V10l7 8 7-8v12" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Muse Studio</a>
+        <p>Tự động tạo và đăng video YouTube với AI. Tiết kiệm thời gian, tập trung vào điều quan trọng hơn.</p>
+        <div class="socials" id="socials">
+          <a data-social="youtube" href="#" hidden aria-label="YouTube" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2C2 8.8 2 12 2 12s0 3.2.4 4.8a2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8c.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8zM10 15V9l5.2 3z"/></svg></a>
+          <a data-social="discord" href="#" hidden aria-label="Discord" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.6 5.3A16.5 16.5 0 0 0 15.5 4l-.5 1a15 15 0 0 0-4.1 0l-.5-1a16.5 16.5 0 0 0-4.1 1.3C3.7 9.1 3 12.8 3.3 16.4a16.6 16.6 0 0 0 5 2.5l1-1.7-1.5-.8.4-.3a11.8 11.8 0 0 0 10.2 0l.4.3-1.5.8 1 1.7a16.6 16.6 0 0 0 5-2.5c.4-4.2-.7-7.9-2.7-11.1zM9.5 14.2c-.9 0-1.6-.8-1.6-1.8s.7-1.8 1.6-1.8 1.6.8 1.6 1.8-.7 1.8-1.6 1.8zm5 0c-.9 0-1.6-.8-1.6-1.8s.7-1.8 1.6-1.8 1.6.8 1.6 1.8-.7 1.8-1.6 1.8z"/></svg></a>
+          <a data-social="email" href="#" hidden aria-label="Email"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5h18a1 1 0 0 1 1 1v.5l-10 6.2L2 6.5V6a1 1 0 0 1 1-1zm19 3.9V18a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V8.9l10 6.2z"/></svg></a>
+        </div>
+      </div>
+      <div class="f-col"><h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>Tính năng</h4><a href="#ho-so">Hồ sơ kênh</a><a href="#prompt">Gợi ý prompt</a><a href="#lich-tu-dong">Lịch tự động</a><a href="#cho-duyet">Duyệt trước khi đăng</a></div>
+      <div class="f-col"><h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Cách hoạt động</h4><a href="#cach-hoat-dong">Quy trình 4 bước</a><a href="#demo">Video demo</a><a href="#tinh-nang">Tất cả tính năng</a></div>
+      <div class="f-col"><h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></svg>Cài đặt</h4><a href="#tai-ve">Tải về</a><a href="#cai-dat">Hướng dẫn cài đặt</a><a href="#hoi-dap">Khắc phục sự cố</a></div>
+      <div class="f-col"><h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></svg>Hỏi đáp</h4><a href="#hoi-dap">Câu hỏi thường gặp</a><a class="js-contact-link" href="#" hidden>Liên hệ</a></div>
+    </div>
+    <div class="f-bottom">
+      <span>© <span id="year">2026</span> Muse Studio. Công cụ cá nhân, không liên kết với Muse hay YouTube.</span>
+      <span>Được phát triển bởi <b class="js-author">Nguyễn Tuấn Kiệt</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></span>
+    </div>
   </div>
 </footer>
 
@@ -382,6 +425,15 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
     if (!cfg.contactUrl) return;
     el.hidden = false; el.href = cfg.contactUrl; el.target = '_blank'; el.rel = 'noreferrer'; el.textContent = cfg.contactLabel || 'Liên hệ';
   });
+  document.getElementById('year').textContent = new Date().getFullYear();
+  document.querySelectorAll('.js-author').forEach(function (el) { if (cfg.author) el.textContent = cfg.author; });
+  var socials = cfg.socials || {};
+  document.querySelectorAll('[data-social]').forEach(function (el) {
+    var url = socials[el.getAttribute('data-social')];
+    if (!url) return;
+    el.href = el.getAttribute('data-social') === 'email' && url.indexOf('mailto:') !== 0 ? 'mailto:' + url : url; el.hidden = false;
+  });
+  document.querySelectorAll('.js-contact-link').forEach(function (el) { if (cfg.contactUrl) { el.hidden = false; el.href = cfg.contactUrl; el.target = '_blank'; el.rel = 'noreferrer'; } });
   document.querySelectorAll('pre.code button').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var text = btn.parentElement.textContent.replace(btn.textContent, '').trim();

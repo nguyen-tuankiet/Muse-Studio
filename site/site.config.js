@@ -9,4 +9,8 @@ window.SITE = {
   contactLabel: 'Liên hệ nhận bản cài',
   // Dòng ghi chú dưới nút tải (ví dụ giá, chính sách hỗ trợ). Để rỗng nếu không cần.
   note: 'Miễn phí dùng thử. Chạy trên máy của bạn, dữ liệu không rời khỏi máy.',
+  // Tên hiển thị ở chân trang.
+  author: 'Nguyễn Tuấn Kiệt',
+  // Biểu tượng mạng xã hội ở chân trang: điền link thì hiện, để rỗng thì ẩn. email: điền địa chỉ email hoặc mailto:...
+  socials: { youtube: '', discord: '', email: '' },
 };

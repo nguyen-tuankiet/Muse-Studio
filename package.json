@@ -8,7 +8,8 @@
     "setup": "npm --prefix web install && npm --prefix web run build",
     "build": "npm --prefix web run build",
     "dev:web": "npm --prefix web run dev",
-    "check": "node --check server.js && node --check lib/muse.js && node --check lib/youtube.js && node --check lib/ai.js"
+    "check": "node --check server.js && node --check lib/muse.js && node --check lib/youtube.js && node --check lib/ai.js",
+    "site:build": "node site/build.mjs"
   },
   "engines": {
     "node": ">=22"

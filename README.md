@@ -143,6 +143,16 @@ Mặc định video do lịch tạo vẫn chờ bạn duyệt; có thể chọn 
 - **Dữ liệu và bảo mật:** mọi thứ nằm trong thư mục `data/` trên máy bạn, gồm cookie Muse, token YouTube và video. Server chỉ nhận kết nối từ máy này (`127.0.0.1`). **Không chia sẻ hoặc đưa `data/` lên git**; đã có sẵn trong `.gitignore`. Cookie và token lưu dạng văn bản trong thư mục này, hãy bảo vệ máy như bảo vệ tài khoản.
 - Tool dùng giao diện web của Muse (tự động hóa trình duyệt), nên khi Muse đổi giao diện có thể cần chỉnh lại selector trong `lib/muse.js`. Hãy kiểm tra điều khoản của Muse và YouTube trước khi dùng thương mại.
 
+## Trang giới thiệu và tải về (để bán/phát hành)
+
+Thư mục `site/` là một trang web tĩnh giới thiệu tool (ảnh giao diện, video demo, hướng dẫn cài đặt, nút tải về). Không cần server riêng.
+
+1. Sửa `site/site.config.js`: số phiên bản, link nút **Tải về**, link liên hệ (Zalo/Facebook/Telegram/email), dòng ghi chú dưới nút tải.
+2. Chạy `npm run site:build`. Lệnh này tạo thư mục `site/dist/` gồm trang web, ảnh, video demo và file `downloads/muse-studio.zip` (mã nguồn từ commit hiện tại, không có `data/`, cookie hay token) kèm mã SHA-256.
+3. Đưa **nguyên thư mục `site/dist/`** lên một hosting tĩnh: Netlify (kéo thả thư mục vào netlify.com/drop), Cloudflare Pages, Vercel hoặc GitHub Pages. Muốn xem thử trên máy: mở thư mục đó bằng bất kỳ web server tĩnh nào.
+
+**Nếu bán thu phí:** đừng để file zip nằm công khai trên trang. Đặt `downloadUrl` thành link thanh toán/nhận file riêng của bạn (hoặc `''` để ẩn nút tải, chỉ hiện nút liên hệ), rồi xóa `site/dist/downloads/` trước khi đưa lên hosting. Ảnh giao diện trong `site/assets/` được chụp lại bằng công cụ nội bộ khi giao diện thay đổi.
+
 ## Cấu trúc
 
 | Đường dẫn | Nội dung |
@@ -153,6 +163,7 @@ Mặc định video do lịch tạo vẫn chờ bạn duyệt; có thể chọn 
 | `lib/youtube.js` | OAuth nhiều kênh, upload, thống kê, theo dõi quota |
 | `lib/ai.js` | Nhờ Muse gợi ý prompt theo hồ sơ kênh và tiêu đề/mô tả/tag |
 | `web/` | Giao diện React + Ant Design (Vite). `web/src` là mã nguồn, `web/dist` là bản build |
+| `site/` | Trang web giới thiệu và tải về (xem mục trên) |
 | `data/` | Dữ liệu cục bộ, tự tạo khi chạy (không đưa vào git) |
 | `Dockerfile` | Chỉ để phục vụ giao diện/API; tạo video cần Chrome/Edge nên chạy trực tiếp trên máy |
 

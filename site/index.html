@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Muse Studio · Tạo và đăng video YouTube tự động</title>
+<meta name="description" content="Muse Studio tạo video bằng Muse theo chủ đề từng kênh, bạn duyệt rồi tự động đăng lên nhiều kênh YouTube theo lịch. Chạy trên máy của bạn.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%232563eb'/%3E%3Cpath d='M9 22V10l7 8 7-8v12' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root {
+  --bg: #f6f8fc; --surface: #ffffff; --ink: #0f172a; --muted: #52607a; --line: #e3e8f2;
+  --brand: #2563eb; --brand-ink: #ffffff; --brand-soft: #e8efff; --accent: #7c3aed; --ok: #16a34a; --code: #0f172a; --code-ink: #e2e8f0;
+  --shadow: 0 24px 60px rgba(15, 23, 42, .12), 0 0 0 1px rgba(15, 23, 42, .06);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #0b1020; --surface: #121a2e; --ink: #eef2fb; --muted: #9aa8c4; --line: #1f2a44; --brand: #4f8cff; --brand-ink: #071024; --brand-soft: #16264a; --shadow: 0 24px 60px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.07); }
+}
+:root[data-theme="dark"] { --bg: #0b1020; --surface: #121a2e; --ink: #eef2fb; --muted: #9aa8c4; --line: #1f2a44; --brand: #4f8cff; --brand-ink: #071024; --brand-soft: #16264a; --shadow: 0 24px 60px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.07); }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.65 "Segoe UI", Inter, -apple-system, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+img, video { max-width: 100%; display: block; }
+a { color: var(--brand); }
+.wrap { width: min(1160px, 100% - 40px); margin-inline: auto; }
+h1, h2, h3 { line-height: 1.2; letter-spacing: -.02em; margin: 0; }
+h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 800; }
+h2 { font-size: clamp(1.7rem, 3.4vw, 2.4rem); font-weight: 800; }
+h3 { font-size: 1.15rem; font-weight: 700; }
+p { margin: 0; }
+.muted { color: var(--muted); }
+section { padding: 84px 0; }
+.eyebrow { display: inline-block; font-size: .85rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--brand); margin-bottom: 12px; }
+.lead { font-size: 1.15rem; color: var(--muted); max-width: 640px; }
+
+/* Thanh điều hướng */
+header.nav { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.1rem; color: var(--ink); text-decoration: none; }
+.nav nav { display: flex; align-items: center; gap: 26px; }
+.nav nav a:not(.btn) { color: var(--muted); text-decoration: none; font-size: .98rem; font-weight: 600; }
+.nav nav a:not(.btn):hover { color: var(--ink); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 22px; border-radius: 12px; font-weight: 700; font-size: 1rem; text-decoration: none; border: 1px solid transparent; cursor: pointer; transition: transform .15s, box-shadow .15s; }
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--brand); color: var(--brand-ink); box-shadow: 0 10px 26px color-mix(in srgb, var(--brand) 40%, transparent); }
+.btn-ghost { background: var(--surface); color: var(--ink); border-color: var(--line); }
+.btn-sm { padding: 8px 16px; font-size: .92rem; border-radius: 10px; }
+.btn[hidden] { display: none; }
+
+/* Hero */
+.hero { padding: 72px 0 40px; text-align: center; }
+.hero .lead { margin: 20px auto 0; }
+.hero .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 32px; }
+.hero small { display: block; margin-top: 14px; color: var(--muted); font-size: .92rem; }
+.shot { border-radius: 16px; overflow: hidden; background: var(--surface); box-shadow: var(--shadow); }
+.shot .bar { display: flex; gap: 7px; padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--surface); }
+.shot .bar i { width: 11px; height: 11px; border-radius: 50%; background: var(--line); }
+.shot img { width: 100%; height: auto; }
+.hero .shot { margin-top: 54px; }
+
+/* Số liệu nhanh */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 8px; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px; }
+.stat b { display: block; font-size: 1.55rem; letter-spacing: -.02em; }
+.stat span { color: var(--muted); font-size: .95rem; }
+
+/* Tính năng */
+.features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 44px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 26px; }
+.card .ico { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: var(--brand-soft); color: var(--brand); font-weight: 800; margin-bottom: 16px; font-size: 1.2rem; }
+.card p { color: var(--muted); margin-top: 8px; font-size: .98rem; }
+
+/* Hàng ảnh + chữ */
+.row { display: grid; grid-template-columns: 1fr 1.25fr; gap: 56px; align-items: center; }
+.row + .row { margin-top: 96px; }
+.row.flip { grid-template-columns: 1.25fr 1fr; }
+.row.flip .text { order: 2; }
+.row .text h2 { margin-bottom: 14px; }
+.ticks { list-style: none; padding: 0; margin: 20px 0 0; display: grid; gap: 10px; }
+.ticks li { padding-left: 30px; position: relative; color: var(--muted); }
+.ticks li::before { content: "✓"; position: absolute; left: 0; top: 0; width: 22px; height: 22px; border-radius: 50%; background: var(--brand-soft); color: var(--brand); font-size: .8rem; font-weight: 800; display: grid; place-items: center; line-height: 1; margin-top: 3px; }
+
+/* Cách hoạt động */
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 44px; counter-reset: s; }
+.step { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 26px; counter-increment: s; position: relative; }
+.step::before { content: counter(s); display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--brand); color: var(--brand-ink); font-weight: 800; margin-bottom: 14px; }
+.step p { color: var(--muted); margin-top: 8px; font-size: .97rem; }
+
+/* Video */
+.video { max-width: 960px; margin: 40px auto 0; }
+.video video { width: 100%; border-radius: 16px; background: #000; box-shadow: var(--shadow); }
+
+/* Cài đặt */
+.alt { background: var(--surface); border-block: 1px solid var(--line); }
+.install { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; margin-top: 44px; align-items: start; }
+.install ol { list-style: none; counter-reset: i; padding: 0; margin: 0; display: grid; gap: 22px; }
+.install li { counter-increment: i; padding-left: 52px; position: relative; }
+.install li::before { content: counter(i); position: absolute; left: 0; top: 0; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--brand-soft); color: var(--brand); font-weight: 800; }
+.install li h3 { margin-bottom: 4px; }
+.install li p { color: var(--muted); font-size: .98rem; }
+pre.code { background: var(--code); color: var(--code-ink); padding: 16px 18px; border-radius: 12px; margin: 12px 0 0; overflow-x: auto; font: 14px/1.6 ui-monospace, Consolas, monospace; position: relative; }
+pre.code button { position: absolute; top: 8px; right: 8px; background: #1e293b; color: #cbd5e1; border: 0; border-radius: 8px; padding: 4px 10px; font-size: .78rem; cursor: pointer; }
+.dl { background: linear-gradient(135deg, #1d4ed8, #7c3aed); color: #fff; border-radius: 22px; padding: 34px; position: sticky; top: 90px; }
+.dl h3 { font-size: 1.4rem; }
+.dl p { opacity: .9; margin-top: 8px; }
+.dl .btn { margin-top: 20px; width: 100%; background: #fff; color: #1e3a8a; }
+.dl .btn.line { background: transparent; color: #fff; border-color: rgba(255,255,255,.5); margin-top: 10px; }
+.dl ul { margin: 18px 0 0; padding-left: 20px; opacity: .92; font-size: .95rem; }
+.dl .meta { margin-top: 14px; font-size: .85rem; opacity: .8; }
+
+/* FAQ */
+.faq { max-width: 820px; margin: 40px auto 0; display: grid; gap: 12px; }
+details { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 4px 22px; }
+summary { cursor: pointer; font-weight: 700; padding: 16px 0; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; color: var(--brand); font-size: 1.4rem; line-height: 1; }
+details[open] summary::after { content: "–"; }
+details p { color: var(--muted); padding: 0 0 18px; }
+
+.final { text-align: center; }
+.final .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 28px; }
+footer { padding: 36px 0 60px; border-top: 1px solid var(--line); color: var(--muted); font-size: .93rem; }
+footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+@media (max-width: 960px) {
+  .features, .steps { grid-template-columns: 1fr 1fr; }
+  .row, .row.flip, .install { grid-template-columns: 1fr; gap: 28px; }
+  .row.flip .text { order: 0; }
+  .stats { grid-template-columns: 1fr 1fr; }
+  .dl { position: static; }
+  .nav nav a:not(.btn) { display: none; }
+}
+@media (max-width: 600px) {
+  section { padding: 60px 0; }
+  .features, .steps, .stats { grid-template-columns: 1fr; }
+  body { font-size: 16px; }
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">
+      <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#2563eb"/><path d="M9 22V10l7 8 7-8v12" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Muse Studio
+    </a>
+    <nav>
+      <a href="#tinh-nang">Tính năng</a>
+      <a href="#cach-hoat-dong">Cách hoạt động</a>
+      <a href="#cai-dat">Cài đặt</a>
+      <a href="#hoi-dap">Hỏi đáp</a>
+      <a class="btn btn-primary btn-sm js-download" href="#cai-dat">Tải về</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow">Tự động hóa kênh YouTube</span>
+      <h1>Kênh YouTube của bạn<br>đăng video mỗi ngày, <span style="color:var(--brand)">không cần ngồi làm</span></h1>
+      <p class="lead">Muse Studio nghĩ nội dung theo chủ đề từng kênh, tạo video bằng tài khoản Muse của bạn, rồi đăng lên nhiều kênh YouTube theo lịch. Bạn chỉ cần duyệt.</p>
+      <div class="cta">
+        <a class="btn btn-primary js-download" href="#cai-dat">Tải về và cài đặt</a>
+        <a class="btn btn-ghost" href="#demo">Xem video demo</a>
+        <a class="btn btn-ghost js-contact" href="#" hidden></a>
+      </div>
+      <small class="js-note"></small>
+      <div class="shot">
+        <div class="bar"><i></i><i></i><i></i></div>
+        <img src="assets/overview.jpg" alt="Màn hình tổng quan của Muse Studio" width="1600" height="1000">
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:20px">
+    <div class="wrap">
+      <div class="stats">
+        <div class="stat"><b>1 lệnh</b><span>bấm đúp Start.bat là chạy</span></div>
+        <div class="stat"><b>Nhiều kênh</b><span>mỗi kênh một chủ đề riêng</span></div>
+        <div class="stat"><b>Chạy nền</b><span>không hiện cửa sổ, không cần mở code</span></div>
+        <div class="stat"><b>100% trên máy bạn</b><span>cookie và dữ liệu không gửi đi đâu</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tinh-nang">
+    <div class="wrap">
+      <span class="eyebrow">Tính năng</span>
+      <h2>Mọi thứ để vận hành kênh, trong một giao diện</h2>
+      <p class="lead" style="margin-top:12px">Từ nghĩ ý tưởng, tạo video, duyệt đến đăng và theo dõi số liệu.</p>
+      <div class="features">
+        <div class="card"><div class="ico">1</div><h3>Mỗi kênh một chủ đề</h3><p>Khai báo ngách, chủ đề, giọng điệu, khung hình một lần. Mọi prompt và tiêu đề sau đó đều bám đúng chất kênh.</p></div>
+        <div class="card"><div class="ico">2</div><h3>Muse tự nghĩ prompt</h3><p>Gợi ý hàng loạt prompt mới theo hồ sơ kênh, không lặp ý đã có. Bạn sửa, duyệt rồi mới tạo video.</p></div>
+        <div class="card"><div class="ico">3</div><h3>Lịch tự động hằng ngày</h3><p>Muse tự nghĩ prompt mỗi ngày, hoặc lấy prompt đã duyệt, hoặc đăng lại video bạn đã tạo sẵn.</p></div>
+        <div class="card"><div class="ico">4</div><h3>Duyệt trước khi đăng</h3><p>Video tạo xong vào hộp Chờ duyệt, đã điền sẵn tiêu đề, mô tả, tag. Bạn xem lại rồi mới đẩy lên YouTube.</p></div>
+        <div class="card"><div class="ico">5</div><h3>Nhiều kênh, một nơi</h3><p>Kết nối nhiều kênh YouTube, theo dõi lượt xem, subscriber và số liệu từng video trên một bảng điều khiển.</p></div>
+        <div class="card"><div class="ico">6</div><h3>Chạy ngầm trên máy bạn</h3><p>Không cần server hay đăng ký thêm dịch vụ. Chạy nền, tự khởi động cùng máy nếu bạn muốn.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <div class="row">
+        <div class="text">
+          <span class="eyebrow">Hồ sơ kênh</span>
+          <h2>Dạy Muse hiểu kênh của bạn</h2>
+          <p class="muted">Điền chủ đề một lần, mọi video sau đó đi đúng hướng.</p>
+          <ul class="ticks"><li>Ngách, chủ đề, đối tượng người xem, giọng điệu</li><li>Điều cần tránh trong nội dung</li><li>Khung hình và thời lượng mặc định (ví dụ Shorts 9:16)</li></ul>
+        </div>
+        <div class="shot"><div class="bar"><i></i><i></i><i></i></div><img loading="lazy" src="assets/brief.jpg" alt="Hồ sơ kênh" width="1600" height="1000"></div>
+      </div>
+      <div class="row flip">
+        <div class="shot"><div class="bar"><i></i><i></i><i></i></div><img loading="lazy" src="assets/prompts.jpg" alt="Danh sách prompt" width="1600" height="1000"></div>
+        <div class="text">
+          <span class="eyebrow">Prompt</span>
+          <h2>Muse gợi ý, bạn quyết định</h2>
+          <p class="muted">Prompt do Muse sinh luôn ở trạng thái chờ duyệt: không có gì được tạo khi bạn chưa đồng ý.</p>
+          <ul class="ticks"><li>Gợi ý 1–10 prompt mỗi lần, kèm yêu cầu riêng</li><li>Sửa nội dung, duyệt hoặc xóa hàng loạt</li><li>Tạo video từ các prompt đã chọn chỉ với một cú bấm</li></ul>
+        </div>
+      </div>
+      <div class="row">
+        <div class="text">
+          <span class="eyebrow">Lịch tự động</span>
+          <h2>Đặt một lần, chạy mỗi ngày</h2>
+          <p class="muted">Chọn nguồn nội dung phù hợp với cách làm của bạn.</p>
+          <ul class="ticks"><li><b>Muse tự nghĩ mỗi ngày:</b> không cần chuẩn bị gì</li><li><b>Prompt đã duyệt:</b> lấy lần lượt, có thể tự sinh thêm khi hết</li><li><b>Video có sẵn:</b> chọn nhiều video, mỗi ngày đăng một video</li></ul>
+        </div>
+        <div class="shot"><div class="bar"><i></i><i></i><i></i></div><img loading="lazy" src="assets/schedule.jpg" alt="Thêm lịch tự động" width="1600" height="1000"></div>
+      </div>
+      <div class="row flip">
+        <div class="shot"><div class="bar"><i></i><i></i><i></i></div><img loading="lazy" src="assets/review.jpg" alt="Duyệt video trước khi đăng" width="1600" height="1000"></div>
+        <div class="text">
+          <span class="eyebrow">Chờ duyệt</span>
+          <h2>Xem lại rồi mới đăng</h2>
+          <p class="muted">Một hộp thư duy nhất cho mọi prompt và video đang chờ bạn.</p>
+          <ul class="ticks"><li>Tiêu đề, mô tả, tag đã điền sẵn bằng Muse</li><li>Hẹn giờ đăng công khai hoặc đăng ngay</li><li>Từ chối và tạo lại chỉ khi bạn bấm</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cach-hoat-dong">
+    <div class="wrap">
+      <span class="eyebrow">Cách hoạt động</span>
+      <h2>Từ ý tưởng đến video đã đăng</h2>
+      <div class="steps">
+        <div class="step"><h3>Khai báo kênh</h3><p>Kết nối kênh YouTube, điền ngách và chủ đề.</p></div>
+        <div class="step"><h3>Muse gợi ý prompt</h3><p>Bạn xem, sửa và duyệt những ý tưởng ưng ý.</p></div>
+        <div class="step"><h3>Tạo video</h3><p>Muse tạo video theo prompt đã duyệt, lần lượt từng video.</p></div>
+        <div class="step"><h3>Duyệt và đăng</h3><p>Xem lại, hẹn giờ, đăng lên YouTube. Hoặc để lịch lo mỗi ngày.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="demo" class="alt">
+    <div class="wrap" style="text-align:center">
+      <span class="eyebrow">Video demo</span>
+      <h2>Xem Muse Studio hoạt động</h2>
+      <div class="video">
+        <video controls preload="none" poster="assets/demo-poster.jpg" playsinline>
+          <source src="assets/demo.mp4" type="video/mp4">
+          Trình duyệt của bạn không phát được video này.
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <section id="cai-dat">
+    <div class="wrap">
+      <span class="eyebrow">Tải về và cài đặt</span>
+      <h2>Cài xong trong khoảng 10 phút</h2>
+      <p class="lead" style="margin-top:12px">Làm theo từng bước. Cần máy Windows, Mac hoặc Linux có Chrome hoặc Edge.</p>
+      <div class="install">
+        <ol>
+          <li>
+            <h3>Cài Node.js (một lần)</h3>
+            <p>Mở cmd, gõ <code>node -v</code>. Nếu chưa có hoặc nhỏ hơn v22, tải bản <b>LTS</b> tại <a href="https://nodejs.org/en/download" target="_blank" rel="noreferrer">nodejs.org</a> rồi cài (bấm Next đến hết).</p>
+            <pre class="code"><button type="button">Chép</button>node -v</pre>
+          </li>
+          <li>
+            <h3>Tải và giải nén</h3>
+            <p>Bấm nút <b>Tải về</b> bên cạnh, rồi chuột phải file zip → <b>Extract All</b> vào một thư mục cố định, ví dụ <code>C:\MuseStudio</code>.</p>
+          </li>
+          <li>
+            <h3>Chạy</h3>
+            <p>Bấm đúp <b>Start.bat</b>. Tool chạy nền, vài giây sau trình duyệt tự mở. Muốn tắt, bấm đúp <b>Stop.bat</b>. Không dùng Windows? Mở terminal trong thư mục rồi gõ:</p>
+            <pre class="code"><button type="button">Chép</button>node server.js</pre>
+          </li>
+          <li>
+            <h3>Kết nối Muse</h3>
+            <p>Vào <b>Cài đặt</b>, dán cookie đăng nhập muse.ai (xuất bằng extension Cookie-Editor, có hướng dẫn ngay trong giao diện), bấm <b>Kiểm tra kết nối</b>.</p>
+          </li>
+          <li>
+            <h3>Kết nối YouTube</h3>
+            <p>Vào <b>Kênh YouTube</b>, làm theo hướng dẫn 5 bước tạo Google OAuth (làm một lần), rồi <b>Thêm kênh</b>. Sau đó điền chủ đề kênh và đặt lịch.</p>
+          </li>
+        </ol>
+        <aside class="dl" id="tai-ve">
+          <h3>Muse Studio <span class="js-version"></span></h3>
+          <p>Bản cài cho Windows, Mac, Linux. Có sẵn giao diện, không cần cài thư viện nào ngoài Node.js.</p>
+          <a class="btn js-download" href="#" id="dl-main">Tải về (.zip)</a>
+          <a class="btn line js-contact" href="#" hidden></a>
+          <ul><li>Bấm đúp là chạy, chạy nền</li><li>Có hướng dẫn chi tiết trong README</li><li>Dữ liệu lưu trên máy bạn</li></ul>
+          <div class="meta js-note"></div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section id="hoi-dap" class="alt">
+    <div class="wrap">
+      <div style="text-align:center"><span class="eyebrow">Hỏi đáp</span><h2>Câu hỏi thường gặp</h2></div>
+      <div class="faq">
+        <details><summary>Tôi có cần tài khoản Muse không?</summary><p>Có. Muse Studio dùng chính tài khoản Muse của bạn để tạo video, bằng cookie đăng nhập bạn tự dán vào Cài đặt. Chi phí và hạn mức tạo video theo gói Muse của bạn.</p></details>
+        <details><summary>Dữ liệu và cookie của tôi có bị gửi đi đâu không?</summary><p>Không. Mọi thứ, gồm cookie Muse, token YouTube và video, lưu trong thư mục <code>data</code> trên máy bạn. Tool chỉ liên lạc với Muse và YouTube, và chỉ nhận kết nối từ chính máy này.</p></details>
+        <details><summary>Mỗi ngày đăng được bao nhiêu video?</summary><p>Mỗi project Google có 10.000 đơn vị API mỗi ngày, mỗi lần đăng tốn 1.600, tức khoảng 6 video mỗi ngày cho toàn bộ các kênh. Trang Kênh luôn hiện mức đã dùng.</p></details>
+        <details><summary>Có cần để máy bật không?</summary><p>Có. Tool chạy trên máy của bạn nên lịch chỉ chạy khi máy đang bật. Nếu máy tắt đúng giờ chạy, lịch tự chạy bù khi bạn bật lại trong cùng ngày. Bạn có thể cho tool tự chạy khi mở máy.</p></details>
+        <details><summary>Có tự đăng không cần duyệt không?</summary><p>Mặc định mọi video đều chờ bạn duyệt. Với lịch, bạn có thể chọn "Tự đăng, không cần duyệt" nếu tin tưởng nội dung.</p></details>
+        <details><summary>Khi Muse đổi giao diện thì sao?</summary><p>Tool điều khiển trình duyệt để làm việc với Muse nên có thể cần cập nhật khi Muse thay đổi. Hãy liên hệ để nhận bản cập nhật.</p></details>
+        <details><summary>Dùng được trên Mac hoặc Linux không?</summary><p>Được, chạy bằng lệnh <code>node server.js</code>. Hai file Start.bat và Stop.bat chỉ dành cho Windows.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="wrap">
+      <h2>Sẵn sàng để kênh tự chạy?</h2>
+      <p class="lead" style="margin:12px auto 0">Tải về, cài trong 10 phút và đặt lịch cho video đầu tiên.</p>
+      <div class="cta">
+        <a class="btn btn-primary js-download" href="#cai-dat">Tải về ngay</a>
+        <a class="btn btn-ghost js-contact" href="#" hidden></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© Muse Studio. Công cụ cá nhân, không liên kết với Muse hay YouTube.</span>
+    <span>YouTube là nhãn hiệu của Google LLC.</span>
+  </div>
+</footer>
+
+<script src="site.config.js"></script>
+<script>
+(function () {
+  var cfg = window.SITE || {};
+  document.querySelectorAll('.js-version').forEach(function (el) { el.textContent = cfg.version ? 'v' + cfg.version : ''; });
+  document.querySelectorAll('.js-note').forEach(function (el) { el.textContent = cfg.note || ''; el.hidden = !cfg.note; });
+  document.querySelectorAll('.js-download').forEach(function (el) {
+    if (el.closest('.nav')) return; // nút trên thanh điều hướng luôn cuộn xuống mục cài đặt
+    if (!cfg.downloadUrl) { el.hidden = true; return; }
+    el.href = cfg.downloadUrl;
+    if (!/^https?:/.test(cfg.downloadUrl)) el.setAttribute('download', '');
+  });
+  document.querySelectorAll('.js-contact').forEach(function (el) {
+    if (!cfg.contactUrl) return;
+    el.hidden = false; el.href = cfg.contactUrl; el.target = '_blank'; el.rel = 'noreferrer'; el.textContent = cfg.contactLabel || 'Liên hệ';
+  });
+  document.querySelectorAll('pre.code button').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var text = btn.parentElement.textContent.replace(btn.textContent, '').trim();
+      (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(function () { btn.textContent = 'Đã chép'; setTimeout(function () { btn.textContent = 'Chép'; }, 1500); }).catch(function () {});
+    });
+  });
+})();
+</script>
+</body>
+</html>

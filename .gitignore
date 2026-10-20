@@ -18,3 +18,6 @@ Thumbs.db
 # Công cụ nội bộ của người phát triển (không đưa cho khách)
 promo/
 tests/
+
+# Thư mục trang giới thiệu đã đóng gói (tạo bằng npm run site:build)
+site/dist/

@@ -154,6 +154,15 @@ Thư mục `site/` là trang web giới thiệu tool (ảnh giao diện, video d
 - Tạo file bản cài để bán: `node site/build.mjs --zip` → `site/release/muse-studio.zip`.
 - Chạy thử toàn bộ luồng thanh toán bằng SePay giả: `node site/api/selftest.mjs`, hoặc `node site/dev.mjs` để xem trên trình duyệt.
 
+## Hỗ trợ
+
+Nếu bạn đã mua Muse Studio và cần giúp đỡ (cài đặt, kết nối Muse hoặc YouTube, lỗi khi chạy), gửi email tới **tech.dev.fit@gmail.com** kèm:
+- mã đơn hàng (dạng `MSxxxxxxxx`, có trong cửa sổ sau khi thanh toán và trong email nhận file),
+- mô tả vấn đề bạn gặp và bước bạn đã làm,
+- ảnh chụp màn hình lỗi, và nội dung hai file `dataserver.log`, `dataserver-error.log` nếu tool chạy nền báo lỗi.
+
+Hãy **không** gửi cookie Muse, token YouTube hay Client Secret qua email.
+
 ## Cấu trúc
 
 | Đường dẫn | Nội dung |

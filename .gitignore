@@ -21,3 +21,6 @@ tests/
 
 # Thư mục trang giới thiệu đã đóng gói (tạo bằng npm run site:build)
 site/dist/
+
+# File bản cài để bán (tạo bằng node site/build.mjs --zip)
+site/release/

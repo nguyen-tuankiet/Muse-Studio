@@ -1,14 +1,16 @@
 // Cấu hình trang giới thiệu: sửa file này, không cần đụng vào index.html.
 window.SITE = {
   version: '2.0.0',
-  // Link nút "Tải về". Mặc định là file zip do `npm run site:build` tạo ra trong thư mục downloads/.
-  // Nếu bán thu phí: đổi thành link thanh toán/nhận file của bạn, hoặc để chuỗi rỗng '' để ẩn nút tải và chỉ hiện nút liên hệ.
-  downloadUrl: 'downloads/muse-studio.zip',
+  // Giá hiển thị trên trang (chuỗi bất kỳ, ví dụ '$5').
+  price: '$5',
+  // Link thanh toán nơi khách trả tiền rồi nhận file (Lemon Squeezy, Gumroad, Payhip, Stripe Payment Link, PayPal...).
+  // Để rỗng '' thì nút Mua ngay dùng contactUrl; không có cả hai thì nút hiện "Sắp mở bán".
+  checkoutUrl: '',
   // Link liên hệ/mua (Zalo, Facebook, Telegram, email dạng mailto:...). Để rỗng '' để ẩn nút liên hệ.
   contactUrl: '',
-  contactLabel: 'Liên hệ nhận bản cài',
+  contactLabel: 'Liên hệ mua',
   // Dòng ghi chú dưới nút tải (ví dụ giá, chính sách hỗ trợ). Để rỗng nếu không cần.
-  note: 'Miễn phí dùng thử. Chạy trên máy của bạn, dữ liệu không rời khỏi máy.',
+  note: 'Thanh toán một lần. Chạy trên máy của bạn, dữ liệu không rời khỏi máy.',
   // Tên hiển thị ở chân trang.
   author: 'Nguyễn Tuấn Kiệt',
   // Link khi bấm vào tên tác giả.

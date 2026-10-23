@@ -1,4 +1,5 @@
-// Đóng gói trang giới thiệu thành site/dist (thư mục sẵn sàng để đưa lên hosting) kèm file zip mã nguồn để tải.
+// Đóng gói trang giới thiệu thành site/dist (thư mục sẵn sàng để đưa lên hosting). KHÔNG đưa file zip mã nguồn vào dist vì trang bán thu phí.
+// Thêm --zip để tạo file bản cài site/release/muse-studio.zip: tải file này lên nơi bán (Lemon Squeezy, Gumroad...) để gửi cho khách sau khi thanh toán.
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
@@ -14,20 +15,23 @@ const version = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf
 fs.mkdirSync(dist, { recursive: true });
 for (const entry of fs.readdirSync(dist)) if (entry !== '.git') fs.rmSync(path.join(dist, entry), { recursive: true, force: true });
 fs.mkdirSync(path.join(dist, 'assets'), { recursive: true });
-fs.mkdirSync(path.join(dist, 'downloads'), { recursive: true });
 
 for (const file of ['index.html', 'site.config.js', 'effects.css', 'effects.js']) fs.copyFileSync(path.join(site, file), path.join(dist, file));
 for (const file of fs.readdirSync(path.join(site, 'assets'))) fs.copyFileSync(path.join(site, 'assets', file), path.join(dist, 'assets', file));
 for (const file of ['demo.mp4', 'demo-poster.jpg']) fs.copyFileSync(path.join(root, 'docs', file), path.join(dist, 'assets', file));
 
-// Zip mã nguồn từ commit hiện tại (chỉ file đã commit: không có data/, node_modules, cookie hay token).
-const zip = path.join(dist, 'downloads', 'muse-studio.zip');
-execFileSync('git', ['archive', '--format=zip', '--prefix=MuseStudio/', '-o', zip, 'HEAD', '--', '.', ':(exclude)docs', ':(exclude)site'], { cwd: root, stdio: 'inherit' });
-const sha = crypto.createHash('sha256').update(fs.readFileSync(zip)).digest('hex');
-fs.writeFileSync(path.join(dist, 'downloads', 'SHA256.txt'), `${sha}  muse-studio.zip\n`);
+// Zip mã nguồn (chỉ khi có --zip): lấy từ commit hiện tại, không có data/, cookie hay token. Lưu ngoài dist.
+let zipInfo = '';
+if (process.argv.includes('--zip')) {
+  const release = path.join(site, 'release');
+  fs.mkdirSync(release, { recursive: true });
+  const zip = path.join(release, 'muse-studio.zip');
+  execFileSync('git', ['archive', '--format=zip', '--prefix=MuseStudio/', '-o', zip, 'HEAD', '--', '.', ':(exclude)docs', ':(exclude)site'], { cwd: root, stdio: 'inherit' });
+  const sha = crypto.createHash('sha256').update(fs.readFileSync(zip)).digest('hex');
+  zipInfo = `\n  file bản cài: ${zip} (${(fs.statSync(zip).size / 1048576).toFixed(1)} MB)\n  SHA-256: ${sha}`;
+}
 // Đồng bộ số phiên bản vào cấu hình trong dist
 const cfgFile = path.join(dist, 'site.config.js');
 fs.writeFileSync(cfgFile, fs.readFileSync(cfgFile, 'utf8').replace(/version: '[^']*'/, `version: '${version}'`));
 
-const mb = (file) => (fs.statSync(file).size / 1048576).toFixed(1);
-console.log(`Đã tạo ${dist}\n  zip mã nguồn: ${mb(zip)} MB (v${version})\n  SHA-256: ${sha}`);
+console.log(`Đã tạo ${dist} (v${version}, không kèm file tải về)${zipInfo}`);

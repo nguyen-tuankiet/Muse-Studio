@@ -143,15 +143,16 @@ Mặc định video do lịch tạo vẫn chờ bạn duyệt; có thể chọn 
 - **Dữ liệu và bảo mật:** mọi thứ nằm trong thư mục `data/` trên máy bạn, gồm cookie Muse, token YouTube và video. Server chỉ nhận kết nối từ máy này (`127.0.0.1`). **Không chia sẻ hoặc đưa `data/` lên git**; đã có sẵn trong `.gitignore`. Cookie và token lưu dạng văn bản trong thư mục này, hãy bảo vệ máy như bảo vệ tài khoản.
 - Tool dùng giao diện web của Muse (tự động hóa trình duyệt), nên khi Muse đổi giao diện có thể cần chỉnh lại selector trong `lib/muse.js`. Hãy kiểm tra điều khoản của Muse và YouTube trước khi dùng thương mại.
 
-## Trang giới thiệu và tải về (để bán/phát hành)
+## Trang giới thiệu và bán hàng
 
-Thư mục `site/` là một trang web tĩnh giới thiệu tool (ảnh giao diện, video demo, hướng dẫn cài đặt, nút tải về). Không cần server riêng.
+Thư mục `site/` là một trang web tĩnh giới thiệu tool (ảnh giao diện, video demo, hướng dẫn cài đặt, khung giá và nút **Mua ngay**). Không cần server riêng. Trang **không chứa file tải về**: khách thanh toán ở nơi bán rồi nhận file ở đó.
 
-1. Sửa `site/site.config.js`: số phiên bản, link nút **Tải về**, link liên hệ (Zalo/Facebook/Telegram/email), dòng ghi chú dưới nút tải.
-2. Chạy `npm run site:build`. Lệnh này tạo thư mục `site/dist/` gồm trang web, ảnh, video demo và file `downloads/muse-studio.zip` (mã nguồn từ commit hiện tại, không có `data/`, cookie hay token) kèm mã SHA-256.
-3. Đưa **nguyên thư mục `site/dist/`** lên một hosting tĩnh: Netlify (kéo thả thư mục vào netlify.com/drop), Cloudflare Pages, Vercel hoặc GitHub Pages. Muốn xem thử trên máy: mở thư mục đó bằng bất kỳ web server tĩnh nào.
+1. Sửa `site/site.config.js`: giá (`price`), link thanh toán (`checkoutUrl`), link liên hệ, ghi chú dưới nút.
+2. Chạy `npm run site:build`. Lệnh này tạo thư mục `site/dist/` gồm trang web, ảnh và video demo.
+3. Đưa **nguyên thư mục `site/dist/`** lên một hosting tĩnh: Netlify, Cloudflare Pages, Vercel hoặc GitHub Pages.
+4. Tạo file bản cài để bán bằng `node site/build.mjs --zip`: ra `site/release/muse-studio.zip` (mã nguồn từ commit hiện tại, không có `data/`, cookie hay token). Tải file này lên nơi bán (Lemon Squeezy, Gumroad, Payhip...) để hệ thống tự gửi cho khách sau khi thanh toán.
 
-**Nếu bán thu phí:** đừng để file zip nằm công khai trên trang. Đặt `downloadUrl` thành link thanh toán/nhận file riêng của bạn (hoặc `''` để ẩn nút tải, chỉ hiện nút liên hệ), rồi xóa `site/dist/downloads/` trước khi đưa lên hosting. Ảnh giao diện trong `site/assets/` được chụp lại bằng công cụ nội bộ khi giao diện thay đổi.
+Ảnh giao diện trong `site/assets/` được chụp lại bằng công cụ nội bộ khi giao diện thay đổi.
 
 ## Cấu trúc
 

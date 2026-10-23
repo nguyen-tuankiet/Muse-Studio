@@ -183,6 +183,7 @@ footer { padding: 56px 0 40px; color: var(--muted); font-size: .98rem; }
 }
 </style>
 <link rel="stylesheet" href="effects.css">
+<link rel="stylesheet" href="pay.css">
 </head>
 <body>
 
@@ -417,6 +418,7 @@ footer { padding: 56px 0 40px; color: var(--muted); font-size: .98rem; }
 
 <script src="site.config.js"></script>
 <script src="effects.js"></script>
+<script src="pay.js"></script>
 <script>
 (function () {
   var cfg = window.SITE || {};
@@ -426,6 +428,7 @@ footer { padding: 56px 0 40px; color: var(--muted); font-size: .98rem; }
   // Nút mua: ưu tiên link thanh toán, không có thì dùng link liên hệ, không có cả hai thì trỏ về khung giá
   document.querySelectorAll('.js-buy').forEach(function (el) {
     if (el.closest('.nav')) return;
+    if (cfg.bankCheckout) { el.href = '#mua'; return; } // thanh toán chuyển khoản ngay trên trang (pay.js)
     var url = cfg.checkoutUrl || cfg.contactUrl;
     if (url) { el.href = url; el.target = '_blank'; el.rel = 'noreferrer'; return; }
     el.href = '#mua';

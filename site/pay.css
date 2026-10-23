@@ -1,0 +1,39 @@
+/* Cửa sổ thanh toán chuyển khoản */
+.pay-overlay { position: fixed; inset: 0; z-index: 100; display: none; align-items: center; justify-content: center; padding: 20px; background: rgba(8, 13, 30, .62); backdrop-filter: blur(4px); }
+.pay-overlay.open { display: flex; animation: payFade .2s ease; }
+@keyframes payFade { from { opacity: 0; } to { opacity: 1; } }
+.pay-box { position: relative; width: min(760px, 100%); max-height: calc(100vh - 40px); overflow: auto; background: var(--surface); color: var(--ink); border-radius: 22px; box-shadow: 0 40px 100px rgba(0, 0, 0, .4); padding: 30px; animation: payPop .25s cubic-bezier(.2, .8, .2, 1); }
+@keyframes payPop { from { transform: translateY(16px) scale(.98); opacity: 0; } to { transform: none; opacity: 1; } }
+.pay-close { position: absolute; top: 14px; right: 14px; width: 38px; height: 38px; border-radius: 50%; border: 0; background: var(--bg); color: var(--muted); font-size: 22px; line-height: 1; cursor: pointer; }
+.pay-close:hover { background: var(--brand-soft); color: var(--brand); }
+.pay-box h3 { font-size: 1.35rem; margin: 0 0 6px; padding-right: 40px; }
+.pay-sub { color: var(--muted); margin: 0 0 20px; }
+.pay-field { display: block; margin: 18px 0 6px; font-weight: 700; }
+.pay-input { width: 100%; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); font: inherit; }
+.pay-input:focus { outline: 2px solid var(--brand); border-color: transparent; }
+.pay-hint { color: var(--muted); font-size: .9rem; margin-top: 8px; }
+.pay-actions { margin-top: 22px; display: flex; gap: 12px; flex-wrap: wrap; }
+.pay-actions .btn { flex: 1 1 200px; }
+.pay-grid { display: grid; grid-template-columns: 250px 1fr; gap: 26px; align-items: start; }
+.pay-qr { background: #fff; border-radius: 16px; padding: 10px; border: 1px solid var(--line); }
+.pay-qr img { width: 100%; height: auto; display: block; border-radius: 8px; }
+.pay-rows { display: grid; gap: 10px; }
+.pay-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 12px; background: var(--bg); }
+.pay-row small { display: block; color: var(--muted); font-size: .8rem; }
+.pay-row b { font-size: 1.05rem; word-break: break-all; }
+.pay-row.key { background: var(--brand-soft); border: 1px solid color-mix(in srgb, var(--brand) 40%, transparent); }
+.pay-row.key b { color: var(--brand); font-size: 1.25rem; letter-spacing: .04em; }
+.pay-copy { flex: none; border: 1px solid var(--line); background: var(--surface); color: var(--muted); border-radius: 8px; padding: 5px 10px; font-size: .8rem; cursor: pointer; }
+.pay-copy:hover { color: var(--brand); border-color: var(--brand); }
+.pay-warn { margin-top: 14px; padding: 12px 14px; border-radius: 12px; background: #fff7e6; color: #8a5a00; font-size: .93rem; border: 1px solid #ffe2a8; }
+:root[data-theme="dark"] .pay-warn { background: #3a2c0a; color: #ffd98a; border-color: #5c4510; }
+.pay-status { display: flex; align-items: center; gap: 10px; margin-top: 18px; color: var(--muted); }
+.pay-spin { width: 18px; height: 18px; border-radius: 50%; border: 3px solid var(--brand-soft); border-top-color: var(--brand); animation: spin .9s linear infinite; flex: none; }
+.pay-ok { text-align: center; padding: 10px 0 4px; }
+.pay-ok .tick { width: 76px; height: 76px; margin: 0 auto 16px; border-radius: 50%; background: #e7f8ee; color: #16a34a; display: grid; place-items: center; animation: payPop .4s cubic-bezier(.2, .8, .2, 1); }
+.pay-ok .tick svg { width: 40px; height: 40px; }
+.pay-ok .btn { margin-top: 20px; min-width: 240px; }
+.pay-error { margin-top: 14px; padding: 12px 14px; border-radius: 12px; background: #fff1f0; color: #b42318; border: 1px solid #ffd0cc; }
+:root[data-theme="dark"] .pay-error { background: #3a1412; color: #ffb4ac; border-color: #5c1f1a; }
+.pay-link { background: none; border: 0; color: var(--brand); cursor: pointer; font: inherit; padding: 0; text-decoration: underline; }
+@media (max-width: 640px) { .pay-grid { grid-template-columns: 1fr; } .pay-qr { max-width: 280px; margin-inline: auto; } .pay-box { padding: 22px 18px; } }

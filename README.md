@@ -145,14 +145,13 @@ Mặc định video do lịch tạo vẫn chờ bạn duyệt; có thể chọn 
 
 ## Trang giới thiệu và bán hàng
 
-Thư mục `site/` là một trang web tĩnh giới thiệu tool (ảnh giao diện, video demo, hướng dẫn cài đặt, khung giá và nút **Mua ngay**). Không cần server riêng. Trang **không chứa file tải về**: khách thanh toán ở nơi bán rồi nhận file ở đó.
+Thư mục `site/` là trang web giới thiệu tool (ảnh giao diện, video demo, hướng dẫn cài đặt, khung giá) kèm **thanh toán chuyển khoản tự động qua SePay**: khách trả tiền xong thì nút Tải về tự hiện ra. File bản cài **không nằm trong trang**; nó được giữ ở một repo riêng tư và chỉ phát cho đơn đã thanh toán.
 
-1. Sửa `site/site.config.js`: giá (`price`), link thanh toán (`checkoutUrl`), link liên hệ, ghi chú dưới nút.
-2. Chạy `npm run site:build`. Lệnh này tạo thư mục `site/dist/` gồm trang web, ảnh và video demo.
-3. Đưa **nguyên thư mục `site/dist/`** lên một hosting tĩnh: Netlify, Cloudflare Pages, Vercel hoặc GitHub Pages.
-4. Tạo file bản cài để bán bằng `node site/build.mjs --zip`: ra `site/release/muse-studio.zip` (mã nguồn từ commit hiện tại, không có `data/`, cookie hay token). Tải file này lên nơi bán (Lemon Squeezy, Gumroad, Payhip...) để hệ thống tự gửi cho khách sau khi thanh toán.
-
-Ảnh giao diện trong `site/assets/` được chụp lại bằng công cụ nội bộ khi giao diện thay đổi.
+- Hướng dẫn cấu hình từng bước (SePay, Upstash, Vercel, thử nghiệm): `site/HUONG-DAN-THANH-TOAN.md`.
+- Cấu hình hiển thị (giá, liên hệ, tác giả): `site/site.config.js`.
+- Đóng gói trang: `npm run site:build` → `site/dist/` (đưa nguyên thư mục này lên hosting, repo `muse-studio-landing`).
+- Tạo file bản cài để bán: `node site/build.mjs --zip` → `site/release/muse-studio.zip`.
+- Chạy thử toàn bộ luồng thanh toán bằng SePay giả: `node site/api/selftest.mjs`, hoặc `node site/dev.mjs` để xem trên trình duyệt.
 
 ## Cấu trúc
 

@@ -3,6 +3,11 @@ window.SITE = {
   version: '2.0.0',
   // Giá hiển thị trên trang (chuỗi bất kỳ, ví dụ '$5').
   price: '$5',
+  // true: thanh toán chuyển khoản ngay trên trang (cần cấu hình các hàm trong site/api, xem site/HUONG-DAN-THANH-TOAN.md).
+  // false: nút Mua ngay dẫn tới checkoutUrl hoặc contactUrl.
+  bankCheckout: true,
+  // Giá hiển thị trong cửa sổ thanh toán (số tiền thật lấy từ biến môi trường PRICE_VND trên máy chủ).
+  priceVndLabel: '125.000đ (khoảng $5)',
   // Link thanh toán nơi khách trả tiền rồi nhận file (Lemon Squeezy, Gumroad, Payhip, Stripe Payment Link, PayPal...).
   // Để rỗng '' thì nút Mua ngay dùng contactUrl; không có cả hai thì nút hiện "Sắp mở bán".
   checkoutUrl: '',
@@ -10,7 +15,7 @@ window.SITE = {
   contactUrl: '',
   contactLabel: 'Liên hệ mua',
   // Dòng ghi chú dưới nút tải (ví dụ giá, chính sách hỗ trợ). Để rỗng nếu không cần.
-  note: 'Thanh toán một lần. Chạy trên máy của bạn, dữ liệu không rời khỏi máy.',
+  note: 'Thanh toán một lần bằng chuyển khoản. Chạy trên máy của bạn, dữ liệu không rời khỏi máy.',
   // Tên hiển thị ở chân trang.
   author: 'Nguyễn Tuấn Kiệt',
   // Link khi bấm vào tên tác giả.

@@ -366,6 +366,7 @@ footer { padding: 56px 0 40px; color: var(--muted); font-size: .98rem; }
     <div class="wrap">
       <div style="text-align:center"><span class="eyebrow">Hỏi đáp</span><h2>Câu hỏi thường gặp</h2></div>
       <div class="faq">
+        <details class="js-support-faq" hidden><summary>Tôi đã mua và cần hỗ trợ thì liên hệ ở đâu?</summary><p>Bạn gửi email tới <a class="js-support" href="#"></a> kèm <b>mã đơn</b> (dạng MSxxxxxxxx, có trong cửa sổ sau khi thanh toán) và mô tả vấn đề, tốt nhất kèm ảnh chụp màn hình. Mình sẽ phản hồi sớm nhất có thể.</p></details>
         <details><summary>Giá bao nhiêu, thanh toán thế nào?</summary><p>Muse Studio có giá <b data-price>$5</b>, thanh toán một lần. Sau khi thanh toán bạn nhận file cài đặt kèm hướng dẫn. Chi phí tài khoản Muse là riêng và theo gói Muse của bạn.</p></details>
         <details><summary>Tôi có cần tài khoản Muse không?</summary><p>Có. Muse Studio dùng chính tài khoản Muse của bạn để tạo video, bằng cookie đăng nhập bạn tự dán vào Cài đặt. Chi phí và hạn mức tạo video theo gói Muse của bạn.</p></details>
         <details><summary>Dữ liệu và cookie của tôi có bị gửi đi đâu không?</summary><p>Không. Mọi thứ, gồm cookie Muse, token YouTube và video, lưu trong thư mục <code>data</code> trên máy bạn. Tool chỉ liên lạc với Muse và YouTube, và chỉ nhận kết nối từ chính máy này.</p></details>
@@ -407,7 +408,7 @@ footer { padding: 56px 0 40px; color: var(--muted); font-size: .98rem; }
       <div class="f-col"><h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>Tính năng</h4><a href="#ho-so">Hồ sơ kênh</a><a href="#prompt">Gợi ý prompt</a><a href="#lich-tu-dong">Lịch tự động</a><a href="#cho-duyet">Duyệt trước khi đăng</a></div>
       <div class="f-col"><h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Cách hoạt động</h4><a href="#cach-hoat-dong">Quy trình 4 bước</a><a href="#demo">Video demo</a><a href="#tinh-nang">Tất cả tính năng</a></div>
       <div class="f-col"><h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></svg>Cài đặt</h4><a href="#mua">Giá và mua</a><a href="#cai-dat">Hướng dẫn cài đặt</a><a href="#hoi-dap">Khắc phục sự cố</a></div>
-      <div class="f-col"><h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></svg>Hỏi đáp</h4><a href="#hoi-dap">Câu hỏi thường gặp</a><a class="js-contact-link" href="#" hidden>Liên hệ</a></div>
+      <div class="f-col"><h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></svg>Hỏi đáp</h4><a href="#hoi-dap">Câu hỏi thường gặp</a><a class="js-contact-link" href="#" hidden>Liên hệ</a><a class="js-support" href="#" hidden>Hỗ trợ khách đã mua</a></div>
     </div>
     <div class="f-bottom">
       <span>© <span id="year">2026</span> Muse Studio. Công cụ cá nhân, không liên kết với Muse hay YouTube.</span>
@@ -441,7 +442,9 @@ footer { padding: 56px 0 40px; color: var(--muted); font-size: .98rem; }
   });
   document.getElementById('year').textContent = new Date().getFullYear();
   document.querySelectorAll('.js-author').forEach(function (el) { if (cfg.author) el.textContent = cfg.author; if (cfg.authorUrl) el.href = cfg.authorUrl; });
-  var socials = cfg.socials || {};
+  var socials = Object.assign({}, cfg.socials || {}); if (!socials.email && cfg.supportEmail) socials.email = cfg.supportEmail;
+  document.querySelectorAll('.js-support').forEach(function (el) { if (!cfg.supportEmail) return; el.hidden = false; el.href = 'mailto:' + cfg.supportEmail + '?subject=' + encodeURIComponent('Hỗ trợ Muse Studio'); el.textContent = el.textContent || cfg.supportEmail; });
+  document.querySelectorAll('.js-support-faq').forEach(function (el) { el.hidden = !cfg.supportEmail; });
   document.querySelectorAll('[data-social]').forEach(function (el) {
     var url = socials[el.getAttribute('data-social')];
     if (!url) return;

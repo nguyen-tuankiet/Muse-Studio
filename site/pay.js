@@ -86,7 +86,7 @@
       '<div class="pay-warn">Nhập <b>đúng nội dung</b> <b>' + esc(order.content) + '</b>. Nội dung sai thì hệ thống không nhận ra khoản chuyển và bạn sẽ không thấy nút tải.</div>' +
       (order.note ? '<div class="pay-error">' + esc(order.note) + '</div>' : '') +
       '<div class="pay-status"><span class="pay-spin"></span><span>Đang chờ thanh toán... trang tự cập nhật, bạn không cần tải lại.</span></div>' +
-      '<p class="pay-hint">Đã chuyển nhưng chờ quá vài phút? ' + (cfg.contactUrl ? '<a href="' + esc(cfg.contactUrl) + '" target="_blank" rel="noreferrer">Liên hệ hỗ trợ</a> kèm mã đơn ' : 'Liên hệ hỗ trợ kèm mã đơn ') + '<b>' + esc(order.code) + '</b>. <button class="pay-link" type="button" data-new>Tạo mã khác</button></p>';
+      '<p class="pay-hint">Đã chuyển nhưng chờ quá vài phút? ' + (cfg.contactUrl ? '<a href="' + esc(cfg.contactUrl) + '" target="_blank" rel="noreferrer">Liên hệ hỗ trợ</a> kèm mã đơn ' : (cfg.supportEmail ? '<a href="mailto:' + esc(cfg.supportEmail) + '?subject=' + encodeURIComponent('Hỗ trợ đơn ' + order.code) + '">Gửi email hỗ trợ</a> kèm mã đơn ' : 'Liên hệ hỗ trợ kèm mã đơn ')) + '<b>' + esc(order.code) + '</b>. <button class="pay-link" type="button" data-new>Tạo mã khác</button></p>';
   }
   function row(label, value, copyable, copyValue) {
     return '<div class="pay-row"><div><small>' + esc(label) + '</small><b>' + esc(value || '') + '</b></div>' + (copyable ? '<button class="pay-copy" type="button" data-copy="' + esc(copyValue || value || '') + '">Chép</button>' : '') + '</div>';
@@ -97,7 +97,7 @@
     box.innerHTML = '<div class="pay-ok"><div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>' +
       '<h3 style="padding:0">Thanh toán thành công</h3><p class="pay-sub">Cảm ơn bạn! Mã đơn <b>' + esc(order.code) + '</b>.</p>' +
       '<a class="btn btn-primary" href="' + esc(order.downloadUrl) + '" download>Tải về Muse Studio (.zip)</a>' +
-      '<p class="pay-hint">' + (order.emailed && order.email ? 'Link tải cũng đã được gửi tới ' + esc(order.email) + '. ' : '') + 'Link này lưu trên trình duyệt của bạn, tải được tối đa ' + esc(order.downloadLimit || '') + ' lần. Sau khi tải: giải nén rồi bấm đúp Start.bat.</p></div>';
+      '<p class="pay-hint">' + (order.emailed && order.email ? 'Link tải cũng đã được gửi tới ' + esc(order.email) + '. ' : '') + 'Link này lưu trên trình duyệt của bạn, tải được tối đa ' + esc(order.downloadLimit || '') + ' lần. Sau khi tải: giải nén rồi bấm đúp Start.bat.' + (cfg.supportEmail ? ' Cần hỗ trợ? Gửi email tới <a href="mailto:' + esc(cfg.supportEmail) + '?subject=' + encodeURIComponent('Hỗ trợ đơn ' + order.code) + '">' + esc(cfg.supportEmail) + '</a> kèm mã đơn.' : '') + '</p></div>';
   }
 
   function poll(saved, first) {

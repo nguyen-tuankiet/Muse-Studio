@@ -14,6 +14,7 @@ function settings() {
     downloadLimit: Number(env('DOWNLOAD_LIMIT', '5')),
     qrBase: env('QR_BASE', 'https://vietqr.app/img'),
     siteUrl: env('SITE_URL').replace(/\/+$/, ''),
+    supportEmail: env('SUPPORT_EMAIL'),
   };
 }
 
@@ -155,7 +156,7 @@ async function sendDownloadEmail(order) {
       method: 'POST', headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         from, to: [order.email], subject: 'Muse Studio: link tải về của bạn',
-        html: `<p>Cảm ơn bạn đã mua Muse Studio. Mã đơn: <b>${order.code}</b>.</p><p><a href="${link}">Bấm vào đây để tải về</a> (tải tối đa ${settings().downloadLimit} lần). Hãy giữ kín link này.</p><p>Sau khi tải, giải nén rồi bấm đúp Start.bat. Hướng dẫn chi tiết nằm trong README.md.</p>`,
+        html: `<p>Cảm ơn bạn đã mua Muse Studio. Mã đơn: <b>${order.code}</b>.</p><p><a href="${link}">Bấm vào đây để tải về</a> (tải tối đa ${settings().downloadLimit} lần). Hãy giữ kín link này.</p><p>Sau khi tải, giải nén rồi bấm đúp Start.bat. Hướng dẫn chi tiết nằm trong README.md.</p>${settings().supportEmail ? `<p>Cần hỗ trợ? Trả lời email này hoặc gửi tới <a href="mailto:${settings().supportEmail}">${settings().supportEmail}</a> kèm mã đơn.</p>` : ''}`,
       }),
     });
     return response.ok;

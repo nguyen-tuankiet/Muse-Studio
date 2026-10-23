@@ -16,6 +16,8 @@ window.SITE = {
   contactLabel: 'Liên hệ mua',
   // Dòng ghi chú dưới nút tải (ví dụ giá, chính sách hỗ trợ). Để rỗng nếu không cần.
   note: 'Thanh toán một lần bằng chuyển khoản. Chạy trên máy của bạn, dữ liệu không rời khỏi máy.',
+  // Email hỗ trợ cho người đã mua (hiện trong cửa sổ sau khi thanh toán, chân trang, hỏi đáp, email gửi khách). Để rỗng '' thì ẩn.
+  supportEmail: '',
   // Tên hiển thị ở chân trang.
   author: 'Nguyễn Tuấn Kiệt',
   // Link khi bấm vào tên tác giả.

@@ -66,6 +66,21 @@ Sau khi thêm biến phải **Redeploy** (Deployments → ba chấm → Redeploy
 
 **Gửi email (tùy chọn):** tạo tài khoản https://resend.com, xác minh tên miền gửi thư, lấy API key. `MAIL_FROM` có dạng `Muse Studio <no-reply@tenmien-cua-ban.com>`. Không cấu hình thì tool vẫn chạy bình thường, chỉ là không gửi email (trang không ghi "đã gửi email" khi chưa gửi được).
 
+## Trang quản trị và thống kê
+
+Trang `/admin/` (ví dụ `https://muse-studio-landing.vercel.app/admin/`) cho bạn theo dõi: lượt xem, khách duy nhất, số lần bấm Mua, đơn đã tạo, đơn đã thanh toán, doanh thu, lượt tải, phễu mua hàng, biểu đồ theo ngày, nguồn truy cập, quốc gia, thiết bị và danh sách đơn gần đây. Tự làm mới mỗi 30 giây.
+
+1. Trên Vercel thêm biến **`ADMIN_PASSWORD`** (loại Secret), đặt mật khẩu dài và khó đoán, rồi **Redeploy**. Chưa đặt thì trang quản trị báo "Chưa đặt ADMIN_PASSWORD" và không ai vào được.
+2. (Tùy chọn) thêm `ADMIN_SECRET` là một chuỗi ngẫu nhiên khác để ký phiên đăng nhập. Không đặt thì mã tự suy ra từ mật khẩu.
+3. Vào `/admin/`, nhập mật khẩu. Phiên đăng nhập 12 giờ; nhập sai quá 8 lần trong 15 phút sẽ bị khóa tạm.
+
+Ghi chú về số liệu:
+- Thống kê **không dùng cookie** và không lưu địa chỉ IP: khách duy nhất chỉ được ước tính bằng một mã băm (IP + trình duyệt + ngày) tồn tại 2 ngày. Số này có thể thấp hơn thực tế khi nhiều người dùng chung mạng.
+- Bộ đếm tính theo giờ Việt Nam. Các trình thu thập (bot) và request lạ bị bỏ qua.
+- Muốn lượt xem của chính bạn không bị tính, mở trang chủ **một lần** trên mỗi trình duyệt với `?notrack=1` (ví dụ `https://muse-studio-landing.vercel.app/?notrack=1`). Muốn tính lại dùng `?notrack=0`.
+- Số liệu chỉ bắt đầu từ lúc bạn đưa bản này lên; dữ liệu giữ khoảng 400 ngày trong Upstash.
+- Trang chủ nên có dòng thông báo ngắn về thống kê ẩn danh nếu bạn muốn minh bạch với khách.
+
 ## 5. Đưa bản cập nhật của trang lên
 
 Trang cần có các file mới (`api/`, `pay.js`, `pay.css`). Trong thư mục dự án:
@@ -91,8 +106,8 @@ Vercel tự triển khai. **Chỉ làm bước này sau khi đã điền xong bi
 ```bash
 npm run site:build
 node site/build.mjs --zip      # tạo file bản cài dùng khi thử
-node site/api/selftest.mjs     # tự kiểm thử toàn bộ luồng bằng SePay giả (21 kiểm tra)
-node site/dev.mjs              # mở http://127.0.0.1:3700 với dữ liệu giả, webhook dùng khóa dev-key
+node site/api/selftest.mjs     # tự kiểm thử toàn bộ luồng thanh toán và trang quản trị bằng SePay giả
+node site/dev.mjs              # mở http://127.0.0.1:3700 với dữ liệu giả; webhook dùng khóa dev-key; quản trị tại /admin/ mật khẩu dev-admin
 ```
 
 ## Khi khách gặp vấn đề

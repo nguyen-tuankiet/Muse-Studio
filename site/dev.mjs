@@ -12,12 +12,13 @@ const require = createRequire(import.meta.url);
 
 process.env.DEV_MEMORY = '1';
 process.env.SEPAY_API_KEY ||= 'dev-key';
+process.env.ADMIN_PASSWORD ||= 'dev-admin';
 process.env.BANK_ACCOUNT ||= '19036999999999';
 process.env.BANK_HOLDER ||= 'NGUYEN TUAN KIET';
 process.env.RELEASE_FILE ||= path.join(site, 'release', 'muse-studio.zip');
 process.env.SITE_URL ||= `http://127.0.0.1:${process.env.PORT || 3700}`;
 
-const handlers = { order: require('./api/order.js'), 'sepay-webhook': require('./api/sepay-webhook.js'), download: require('./api/download.js') };
+const handlers = { order: require('./api/order.js'), 'sepay-webhook': require('./api/sepay-webhook.js'), download: require('./api/download.js'), track: require('./api/track.js'), 'admin-login': require('./api/admin-login.js'), 'admin-stats': require('./api/admin-stats.js') };
 const types = { '.css': 'text/css; charset=utf-8', '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.jpg': 'image/jpeg', '.png': 'image/png', '.mp4': 'video/mp4', '.zip': 'application/zip', '.txt': 'text/plain; charset=utf-8' };
 const port = Number(process.env.PORT || 3700);
 
@@ -36,11 +37,12 @@ http.createServer(async (req, res) => {
     res.json = (data) => { res.setHeader('Content-Type', 'application/json; charset=utf-8'); res.end(JSON.stringify(data)); return res; };
     return handler(req, res);
   }
-  let p = decodeURIComponent(url.pathname); if (p.endsWith('/')) p += 'index.html';
+  let p = decodeURIComponent(url.pathname); if (p === '/admin') p = '/admin/'; if (p.endsWith('/')) p += 'index.html';
   const file = path.join(dist, p);
   if (!file.startsWith(dist) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) { res.writeHead(404); return res.end('Not found'); }
   const size = fs.statSync(file).size; const range = /bytes=(\d+)-(\d*)/.exec(req.headers.range || '');
   const headers = { 'Content-Type': types[path.extname(file)] || 'application/octet-stream', 'Accept-Ranges': 'bytes' };
   if (range) { const start = Number(range[1]); const end = range[2] ? Number(range[2]) : size - 1; res.writeHead(206, { ...headers, 'Content-Range': `bytes ${start}-${end}/${size}`, 'Content-Length': end - start + 1 }); return fs.createReadStream(file, { start, end }).pipe(res); }
   res.writeHead(200, { ...headers, 'Content-Length': size }); fs.createReadStream(file).pipe(res);
-}).listen(port, '127.0.0.1', () => console.log(`Chạy thử trang + thanh toán (dữ liệu giả) tại http://127.0.0.1:${port}\nGiả lập SePay: node site/api/selftest.mjs hoặc POST /api/sepay-webhook với header Authorization: Apikey ${process.env.SEPAY_API_KEY}`));
+}).listen(port, '127.0.0.1', () => console.log(`Chạy thử trang + thanh toán (dữ liệu giả) tại http://127.0.0.1:${port}\nTrang quản trị: /admin/ (mật khẩu dev-admin)
+Giả lập SePay: node site/api/selftest.mjs hoặc POST /api/sepay-webhook với header Authorization: Apikey ${process.env.SEPAY_API_KEY}`));

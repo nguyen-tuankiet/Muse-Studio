@@ -148,6 +148,7 @@ Mặc định video do lịch tạo vẫn chờ bạn duyệt; có thể chọn 
 Thư mục `site/` là trang web giới thiệu tool (ảnh giao diện, video demo, hướng dẫn cài đặt, khung giá) kèm **thanh toán chuyển khoản tự động qua SePay**: khách trả tiền xong thì nút Tải về tự hiện ra. File bản cài **không nằm trong trang**; nó được giữ ở một repo riêng tư và chỉ phát cho đơn đã thanh toán.
 
 - Hướng dẫn cấu hình từng bước (SePay, Upstash, Vercel, thử nghiệm): `site/HUONG-DAN-THANH-TOAN.md`.
+- Trang quản trị `/admin/` (mật khẩu `ADMIN_PASSWORD`): lượt truy cập, bấm Mua, đơn hàng, doanh thu, lượt tải.
 - Cấu hình hiển thị (giá, liên hệ, tác giả): `site/site.config.js`.
 - Đóng gói trang: `npm run site:build` → `site/dist/` (đưa nguyên thư mục này lên hosting, repo `muse-studio-landing`).
 - Tạo file bản cài để bán: `node site/build.mjs --zip` → `site/release/muse-studio.zip`.

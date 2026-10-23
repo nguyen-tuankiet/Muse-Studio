@@ -19,6 +19,7 @@ module.exports = async (req, res) => {
       return res.status(429).json({ error: 'limit', message: `Bạn đã tải đủ ${limit} lần. Vui lòng liên hệ hỗ trợ nếu cần thêm.` });
     }
     const file = await lib.readRelease();
+    await lib.statInc({ downloads: 1 });
     res.setHeader('Content-Type', 'application/zip');
     res.setHeader('Content-Disposition', 'attachment; filename="muse-studio.zip"');
     res.setHeader('Content-Length', String(file.length));

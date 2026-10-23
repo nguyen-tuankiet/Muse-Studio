@@ -16,7 +16,10 @@ fs.mkdirSync(dist, { recursive: true });
 for (const entry of fs.readdirSync(dist)) if (entry !== '.git') fs.rmSync(path.join(dist, entry), { recursive: true, force: true });
 fs.mkdirSync(path.join(dist, 'assets'), { recursive: true });
 
-for (const file of ['index.html', 'site.config.js', 'effects.css', 'effects.js', 'pay.css', 'pay.js']) fs.copyFileSync(path.join(site, file), path.join(dist, file));
+for (const file of ['index.html', 'site.config.js', 'effects.css', 'effects.js', 'pay.css', 'pay.js', 'analytics.js']) fs.copyFileSync(path.join(site, file), path.join(dist, file));
+// Trang quản trị
+fs.mkdirSync(path.join(dist, 'admin'), { recursive: true });
+fs.copyFileSync(path.join(site, 'admin', 'index.html'), path.join(dist, 'admin', 'index.html'));
 // Các hàm thanh toán (Vercel Functions): sao chép vào dist/api, bỏ file tự kiểm thử
 fs.mkdirSync(path.join(dist, 'api'), { recursive: true });
 for (const file of fs.readdirSync(path.join(site, 'api'))) if (file.endsWith('.js')) fs.copyFileSync(path.join(site, 'api', file), path.join(dist, 'api', file));

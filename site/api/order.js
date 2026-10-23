@@ -31,6 +31,9 @@ async function create(req, res) {
   do { code = lib.randomCode(); tries += 1; } while (tries < 5 && await lib.getOrder(code));
   const order = { code, token: lib.randomToken(), email, amount: cfg.priceVnd, status: 'pending', createdAt: new Date().toISOString() };
   await lib.saveOrder(order, lib.ORDER_PENDING_TTL);
+  await lib.redis(['LPUSH', 'orders:recent', code]).catch(() => {});
+  await lib.redis(['LTRIM', 'orders:recent', '0', '199']).catch(() => {});
+  await lib.statInc({ orders: 1 });
   return res.status(201).json(view(order, cfg));
 }
 

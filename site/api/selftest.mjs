@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 const site = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const port = 3799; const base = `http://127.0.0.1:${port}`; const key = 'test-key';
-const server = spawn(process.execPath, [path.join(site, 'dev.mjs')], { env: { ...process.env, PORT: String(port), SEPAY_API_KEY: key, PRICE_VND: '125000', DOWNLOAD_LIMIT: '2' }, stdio: 'ignore' });
+const server = spawn(process.execPath, [path.join(site, 'dev.mjs')], { env: { ...process.env, PORT: String(port), SEPAY_API_KEY: key, PRICE_VND: '125000', DOWNLOAD_LIMIT: '2', ADMIN_PASSWORD: 'test-admin' }, stdio: 'ignore' });
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 let failed = 0;
 const check = (name, ok, extra = '') => { console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${extra ? '  — ' + extra : ''}`); if (!ok) failed += 1; };
@@ -70,6 +70,33 @@ try {
   // --- giới hạn tạo đơn
   let last = 201; for (let i = 0; i < 25 && last === 201; i += 1) last = (await post('/api/order', {})).status;
   check('tạo quá nhiều đơn từ một IP → 429', last === 429);
+
+  // --- thống kê và trang quản trị
+  const human = { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36' };
+  const track = (event, extra = {}, headers = human) => post('/api/track', { event, ...extra }, headers);
+  await track('view', { ref: 'www.facebook.com' }); await track('view'); await track('pricing_view'); await track('buy_click'); await track('demo_play');
+  check('khách giả (bot) và sự kiện lạ bị bỏ qua', (await track('view', {}, { 'User-Agent': 'Googlebot/2.1' })).status === 204 && (await track('hack_the_planet')).status === 204);
+  check('GET /api/track không được phép', (await call('/api/track')).status === 405);
+  check('chưa đăng nhập → không xem được thống kê', (await call('/api/admin-stats')).status === 401);
+  check('cookie giả → không xem được thống kê', (await call('/api/admin-stats', { headers: { Cookie: 'muse_admin=9999999999999.abc' } })).status === 401);
+  let login = await fetch(base + '/api/admin-login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: 'sai' }) });
+  check('sai mật khẩu quản trị → 401', login.status === 401);
+  login = await fetch(base + '/api/admin-login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: 'test-admin' }) });
+  const cookie = (login.headers.get('set-cookie') || '').split(';')[0];
+  const setCookie = login.headers.get('set-cookie') || '';
+  check('đăng nhập đúng: cookie HttpOnly + SameSite=Strict', login.status === 200 && cookie.startsWith('muse_admin=') && /HttpOnly/.test(setCookie) && /SameSite=Strict/.test(setCookie));
+  const stats = await call('/api/admin-stats?days=7', { headers: { Cookie: cookie } });
+  const totals = stats.body.totals || {};
+  check('thống kê: 2 lượt xem, 1 khách duy nhất, 1 thấy giá, 1 bấm mua, 1 xem demo', totals.views === 2 && totals.uniq === 1 && totals.pricing_view === 1 && totals.buy_click === 1 && totals.demo_play === 1, JSON.stringify(totals));
+  check('thống kê: 2 đơn đã trả, doanh thu 325.000đ, 2 lượt tải', totals.paid === 2 && totals.revenue === 325000 && totals.downloads === 2, JSON.stringify(totals));
+  check('thống kê: nguồn truy cập, thiết bị và quốc gia', stats.body.referrers.some((r) => r.name === 'facebook.com' && r.count === 1) && stats.body.referrers.some((r) => r.name === 'direct') && stats.body.devices[0].name === 'desktop' && stats.body.countries[0].name === '??');
+  check('thống kê: có đơn gần đây, email và trạng thái', stats.body.recent.some((o) => o.status === 'paid' && o.email === 'khach@example.com' && o.downloads === 2) && stats.body.recent.length >= 2);
+  check('chuỗi 7 ngày, ngày cuối là hôm nay', stats.body.series.length === 7 && stats.body.series[6].views === 2);
+  check('GET admin-login báo đã đăng nhập', (await call('/api/admin-login', { headers: { Cookie: cookie } })).body.loggedIn === true);
+  const out = await fetch(base + '/api/admin-login', { method: 'DELETE', headers: { Cookie: cookie } });
+  check('đăng xuất xóa cookie', /Max-Age=0/.test(out.headers.get('set-cookie') || ''));
+  let blocked = 0; for (let i = 0; i < 10; i += 1) blocked = (await post('/api/admin-login', { password: 'sai' })).status;
+  check('nhập sai mật khẩu liên tục → 429', blocked === 429);
 } catch (error) { console.error(error); failed += 1; }
 server.kill();
 console.log(failed ? `\n${failed} lỗi` : '\nTẤT CẢ ĐẠT');

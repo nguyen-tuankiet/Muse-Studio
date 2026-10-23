@@ -7,7 +7,7 @@ Sao chép và chỉnh theo từng nơi đăng. Ảnh nằm trong thư mục `ima
 - **Tên:** Muse Studio
 - **Khẩu hiệu (dưới 60 ký tự):** Kênh YouTube tự đăng video mỗi ngày
 - **Phân loại gợi ý:** Công cụ năng suất / Tự động hóa / Dành cho người làm nội dung
-- **Giá:** $5, thanh toán một lần
+- **Giá:** 50.000đ, thanh toán một lần
 - **Nền tảng:** Windows (có Start.bat), Mac và Linux (chạy bằng lệnh `node server.js`)
 - **Từ khóa:** tạo video YouTube tự động, đăng video YouTube theo lịch, quản lý nhiều kênh YouTube, Muse AI, công cụ cho content creator
 
@@ -67,7 +67,7 @@ Mình vừa làm xong **Muse Studio**: công cụ giúp kênh YouTube tự đăn
 Muse gợi ý prompt theo chủ đề từng kênh → bạn duyệt → tạo video → tự đăng lên YouTube theo lịch.
 Chạy trên máy của bạn, dữ liệu không đi đâu cả. Bấm đúp là chạy.
 
-Giá $5, thanh toán một lần. Ai làm nhiều kênh YouTube ngách thì nhắn mình xem demo nhé.
+Giá 50.000đ, thanh toán một lần. Ai làm nhiều kênh YouTube ngách thì nhắn mình xem demo nhé.
 
 #YouTube #ContentCreator #TuDongHoa #MuseStudio
 
@@ -85,7 +85,7 @@ Mình làm **Muse Studio** để giải quyết đúng việc đó:
 
 Lưu ý: cần tài khoản Muse và một Google OAuth tự tạo (có hướng dẫn trong tool). Giới hạn của YouTube là khoảng 6 video mỗi ngày.
 
-👉 Xem demo và mua ($5, thanh toán một lần): (dán link trang của bạn)
+👉 Xem demo và mua (50.000đ, thanh toán một lần): (dán link trang của bạn)
 
 #YouTube #TuDongHoa #ContentCreator #MuseStudio
 

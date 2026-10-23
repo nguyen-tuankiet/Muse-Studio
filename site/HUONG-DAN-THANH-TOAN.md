@@ -53,7 +53,7 @@ Vào dự án `muse-studio-landing` trên Vercel → **Settings → Environment 
 | `BANK_NAME` | tên ngân hàng như trong SePay, ví dụ `BIDV` | có (mặc định `BIDV`) |
 | `BANK_ACCOUNT` | số tài khoản nhận tiền; với BIDV là **số tài khoản ảo (VA)** do SePay cấp, ví dụ `96247NJ49C` (xem bước 1.2) | có |
 | `BANK_HOLDER` | tên chủ tài khoản, không dấu, viết hoa | nên có |
-| `PRICE_VND` | giá bán bằng đồng, ví dụ `125000` | mặc định 125000 |
+| `PRICE_VND` | giá bán bằng đồng, ví dụ `50000` | mặc định 50000 |
 | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | từ bước 2 | có |
 | `RELEASE_REPO` | `tên-github/muse-studio-release` | có |
 | `GITHUB_TOKEN` | token từ bước 3.4 | có |
@@ -123,6 +123,6 @@ node site/dev.mjs              # mở http://127.0.0.1:3700 với dữ liệu gi
 ## Giới hạn cần biết
 
 - Mã đơn và token là thứ duy nhất chứng minh đã mua: ai có link tải thì tải được (tối đa `DOWNLOAD_LIMIT` lần). Không thể chặn tuyệt đối việc khách chia sẻ file sau khi tải.
-- Số tiền khớp theo đồng Việt Nam. Tỷ giá so với $5 do bạn đặt qua `PRICE_VND`.
+- Số tiền khớp theo đồng Việt Nam. Giá bán do bạn đặt qua `PRICE_VND` (hiện 50.000đ); nhớ sửa cả `price` và `priceVndLabel` trong `site/site.config.js` cho khớp.
 - Mã QR do dịch vụ vietqr.app tạo. Nếu dịch vụ đó ngừng, trang báo "Không tải được mã QR" và khách vẫn chuyển khoản theo thông tin hiển thị. Có thể đổi sang dịch vụ khác bằng biến `QR_BASE`.
 - Gói miễn phí của Vercel (Hobby) theo điều khoản dành cho dùng cá nhân, phi thương mại. Bán hàng thì nên xem lại điều khoản hoặc dùng gói trả phí/nền tảng khác.

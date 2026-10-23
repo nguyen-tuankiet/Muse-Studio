@@ -1,4 +1,4 @@
-# Thanh toán chuyển khoản tự động (SePay + Techcombank)
+# Thanh toán chuyển khoản tự động (SePay)
 
 Khách bấm **Mua ngay** → hiện mã QR chuyển khoản kèm mã đơn → tiền vào tài khoản → SePay báo về trang của bạn → trang **tự hiện nút Tải về**. Không cần bạn làm gì cho từng đơn.
 
@@ -20,8 +20,8 @@ Mã máy chủ nằm trong `site/api/`, chạy dạng Vercel Functions cùng tra
 ## 1. SePay
 
 1. Vào https://my.sepay.vn/register tạo tài khoản.
-2. Thêm tài khoản ngân hàng **Techcombank** và xác nhận bằng OTP theo hướng dẫn trong SePay. SePay hiển thị cho bạn **số tài khoản dùng để nhận tiền**. Với một số ngân hàng đó là *tài khoản ảo (VA)* do SePay cấp chứ không phải số tài khoản chính. Lấy đúng số mà SePay hướng dẫn nhận tiền (xem mục Tạo QR của SePay) để điền vào `BANK_ACCOUNT` ở bước 4.
-3. Vào menu **Webhooks → + Thêm webhook**:
+2. Thêm tài khoản ngân hàng (ví dụ **BIDV**; Techcombank có thể chưa được SePay hỗ trợ cho tài khoản cá nhân, bạn xem danh sách ngân hàng trong SePay) và xác nhận bằng OTP theo hướng dẫn trong SePay. SePay hiển thị cho bạn **số tài khoản dùng để nhận tiền**. Với một số ngân hàng đó là *tài khoản ảo (VA)* do SePay cấp chứ không phải số tài khoản chính. Lấy đúng số mà SePay hướng dẫn nhận tiền (xem mục Tạo QR của SePay) để điền vào `BANK_ACCOUNT` ở bước 4.
+3. Vào menu **Tích hợp WebHooks → + Thêm webhook**:
    - Sự kiện: **Có tiền vào**
    - URL: `https://TÊN-MIỀN-CỦA-BẠN/api/sepay-webhook`
    - Xác thực: **API Key**. Tự đặt một chuỗi dài ngẫu nhiên (ví dụ 32 ký tự) và **ghi lại**, đây là `SEPAY_API_KEY`.
@@ -50,8 +50,8 @@ Vào dự án `muse-studio-landing` trên Vercel → **Settings → Environment 
 | Biến | Giá trị | Bắt buộc |
 |---|---|---|
 | `SEPAY_API_KEY` | chuỗi bạn đặt ở bước 1.3 | có |
-| `BANK_NAME` | `Techcombank` | có (mặc định đã là Techcombank) |
-| `BANK_ACCOUNT` | số tài khoản nhận tiền (xem bước 1.2) | có |
+| `BANK_NAME` | tên ngân hàng như trong SePay, ví dụ `BIDV` | có (mặc định `BIDV`) |
+| `BANK_ACCOUNT` | số tài khoản nhận tiền; với BIDV là **số tài khoản ảo (VA)** do SePay cấp, ví dụ `96247NJ49C` (xem bước 1.2) | có |
 | `BANK_HOLDER` | tên chủ tài khoản, không dấu, viết hoa | nên có |
 | `PRICE_VND` | giá bán bằng đồng, ví dụ `125000` | mặc định 125000 |
 | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | từ bước 2 | có |

@@ -8,7 +8,7 @@ const env = (name, fallback = '') => process.env[name] || fallback;
 function settings() {
   return {
     priceVnd: Number(env('PRICE_VND', '125000')),
-    bankName: env('BANK_NAME', 'Techcombank'),
+    bankName: env('BANK_NAME', 'BIDV'),
     bankAccount: env('BANK_ACCOUNT'),
     bankHolder: env('BANK_HOLDER'),
     downloadLimit: Number(env('DOWNLOAD_LIMIT', '5')),

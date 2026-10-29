@@ -122,6 +122,8 @@
   document.addEventListener('click', function (e) {
     var button = e.target.closest('.js-buy');
     if (!button) return;
+    // Nút không chọn gói (đầu trang, thanh trên, cuối trang) chỉ cuộn xuống khung chọn gói; nút trong từng gói mới mở thanh toán
+    if (!button.hasAttribute('data-plan')) return;
     e.preventDefault(); plan = button.getAttribute('data-plan') === 'pro' ? 'pro' : 'basic'; poll.started = Date.now(); open();
   });
   // Link trong email: /?order=...&token=... mở thẳng đơn đó

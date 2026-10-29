@@ -124,7 +124,7 @@ svg text { fill: var(--muted); font-size: 11px; }
     $('updated').textContent = 'Cập nhật lúc ' + new Date(d.generatedAt).toLocaleTimeString('vi-VN') + ' · ' + d.days + ' ngày gần nhất · tự làm mới mỗi 30 giây';
     var kpis = [
       ['Lượt xem trang', num(t.views), ''], ['Khách duy nhất', num(t.uniq), ''], ['Bấm Mua ngay', num(t.buy_click), pct(t.buy_click, t.uniq) + ' khách'],
-      ['Đơn đã tạo', num(t.orders), ''], ['Đã thanh toán', num(t.paid), 'tỷ lệ ' + pct(t.paid, t.uniq) + ' khách'], ['Doanh thu', money(t.revenue), ''], ['Lượt tải', num(t.downloads), ''],
+      ['Đơn đã tạo', num(t.orders), ''], ['Đã thanh toán', num(t.paid), 'tỷ lệ ' + pct(t.paid, t.uniq) + ' khách'], ['Doanh thu', money(t.revenue), 'Pro: ' + num(t.paid_pro) + ' đơn, ' + money(t.revenue_pro)], ['Lượt tải', num(t.downloads), ''],
     ];
     $('kpis').replaceChildren.apply($('kpis'), kpis.map(function (k) { var c = el('div', undefined, 'card kpi'); c.append(el('span', k[0]), el('b', k[1])); if (k[2]) c.append(el('small', k[2])); return c; }));
 
@@ -151,12 +151,12 @@ svg text { fill: var(--muted); font-size: 11px; }
   }
   function orders(rows) {
     var table = $('orders'); table.replaceChildren();
-    var head = el('tr'); ['Mã đơn', 'Email', 'Trạng thái', 'Số tiền', 'Tải'].forEach(function (h, i) { head.append(el('th', h, i >= 3 ? 'num' : '')); }); table.append(head);
-    if (!rows.length) { var tr = el('tr'); var td = el('td', 'Chưa có đơn hàng', 'muted'); td.colSpan = 5; tr.append(td); table.append(tr); return; }
+    var head = el('tr'); ['Mã đơn', 'Email', 'Gói', 'Trạng thái', 'Số tiền', 'Tải'].forEach(function (h, i) { head.append(el('th', h, i >= 4 ? 'num' : '')); }); table.append(head);
+    if (!rows.length) { var tr = el('tr'); var td = el('td', 'Chưa có đơn hàng', 'muted'); td.colSpan = 6; tr.append(td); table.append(tr); return; }
     rows.forEach(function (o) {
       var tr = el('tr'); var status = el('span', o.status === 'paid' ? 'Đã trả' : (o.underpaid ? 'Thiếu tiền' : 'Chờ trả'), 'tag ' + (o.status === 'paid' ? 'paid' : 'pending'));
       var code = el('td', o.code); code.title = new Date(o.paidAt || o.createdAt).toLocaleString('vi-VN'); code.style.fontFamily = 'ui-monospace, Consolas, monospace';
-      var s = el('td'); s.append(status); tr.append(code, el('td', o.email || '—'), s, el('td', money(o.amount), 'num'), el('td', String(o.downloads), 'num')); table.append(tr);
+      var s = el('td'); s.append(status); tr.append(code, el('td', o.email || '—'), el('td', o.plan === 'pro' ? 'Pro' : 'Cơ bản'), s, el('td', money(o.amount), 'num'), el('td', String(o.downloads), 'num')); table.append(tr);
     });
   }
 

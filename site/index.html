@@ -128,6 +128,10 @@ pre.code button { position: absolute; top: 8px; right: 8px; background: #1e293b;
 .dl .btn { margin-top: 20px; width: 100%; background: #fff; color: #1e3a8a; }
 .dl .btn.line { background: transparent; color: #fff; border-color: rgba(255,255,255,.5); margin-top: 10px; }
 .dl ul { margin: 18px 0 0; padding-left: 20px; opacity: .92; font-size: .95rem; display: grid; gap: 6px; }
+.plans { display: grid; gap: 20px; position: sticky; top: 90px; }
+.plans .dl { position: static; }
+.dl.pro { background: linear-gradient(135deg, #7c3aed, #db2777); }
+.dl .badge { display: inline-block; background: rgba(255,255,255,.2); border-radius: 999px; padding: 3px 12px; font-size: .78rem; font-weight: 700; margin-bottom: 8px; }
 .dl .meta { margin-top: 14px; font-size: .85rem; opacity: .8; }
 
 /* FAQ */
@@ -173,7 +177,7 @@ footer { padding: 56px 0 40px; color: var(--muted); font-size: .98rem; }
   .row, .row.flip, .install { grid-template-columns: 1fr; gap: 28px; }
   .row.flip .text { order: 0; }
   .stats { grid-template-columns: 1fr 1fr; }
-  .dl { position: static; }
+  .dl, .plans { position: static; }
   .nav nav a:not(.btn) { display: none; }
 }
 @media (max-width: 600px) {
@@ -349,15 +353,25 @@ footer { padding: 56px 0 40px; color: var(--muted); font-size: .98rem; }
             <p>Vào <b>Kênh YouTube</b>, làm theo hướng dẫn 5 bước tạo Google OAuth (làm một lần), rồi <b>Thêm kênh</b>. Sau đó điền chủ đề kênh và đặt lịch.</p>
           </li>
         </ol>
-        <aside class="dl" id="mua">
-          <h3>Muse Studio <span class="js-version"></span></h3>
+        <div class="plans" id="mua">
+        <aside class="dl">
+          <h3>Cơ bản <span class="js-version"></span></h3>
           <div class="price"><b data-price>50.000đ</b><span>thanh toán một lần</span></div>
           <p>Bản cài cho Windows, Mac, Linux. Có sẵn giao diện, không cần cài thư viện nào ngoài Node.js.</p>
-          <a class="btn js-buy js-buy-main" href="#" id="dl-main">Mua ngay</a>
+          <a class="btn js-buy js-buy-main" href="#" id="dl-main" data-plan="basic">Mua gói cơ bản</a>
           <a class="btn line js-contact" href="#" hidden></a>
           <ul><li>Bấm đúp là chạy, chạy nền</li><li>Có hướng dẫn chi tiết trong README</li><li>Dữ liệu lưu trên máy bạn</li></ul>
           <div class="meta js-note"></div>
         </aside>
+        <aside class="dl pro">
+          <span class="badge">Tiết kiệm công sức</span>
+          <h3>Pro: tool + prompt</h3>
+          <div class="price"><b data-price-pro>99.000đ</b><span>thanh toán một lần</span></div>
+          <p>Toàn bộ Muse Studio và gói prompt tiếng Việt viết sẵn cho video ngắn, nhập vào tool bằng một lần dán.</p>
+          <a class="btn js-buy" href="#mua" data-plan="pro">Mua gói Pro</a>
+          <ul><li>Mọi thứ trong gói cơ bản</li><li>323 prompt tiếng Việt, 11 chủ đề kênh mẫu</li><li>Hồ sơ kênh, mẫu tiêu đề, mô tả, hashtag</li><li>PDF hướng dẫn viết prompt và tránh nội dung lặp</li></ul>
+        </aside>
+        </div>
       </div>
     </div>
   </section>
@@ -367,7 +381,7 @@ footer { padding: 56px 0 40px; color: var(--muted); font-size: .98rem; }
       <div style="text-align:center"><span class="eyebrow">Hỏi đáp</span><h2>Câu hỏi thường gặp</h2></div>
       <div class="faq">
         <details class="js-support-faq" hidden><summary>Tôi đã mua và cần hỗ trợ thì liên hệ ở đâu?</summary><p>Bạn gửi email tới <a class="js-support" href="#"></a> kèm <b>mã đơn</b> (dạng MSxxxxxxxx, có trong cửa sổ sau khi thanh toán) và mô tả vấn đề, tốt nhất kèm ảnh chụp màn hình. Mình sẽ phản hồi sớm nhất có thể.</p></details>
-        <details><summary>Giá bao nhiêu, thanh toán thế nào?</summary><p>Muse Studio có giá <b data-price>50.000đ</b>, thanh toán một lần. Sau khi thanh toán bạn nhận file cài đặt kèm hướng dẫn. Chi phí tài khoản Muse là riêng và theo gói Muse của bạn.</p></details>
+        <details><summary>Giá bao nhiêu, thanh toán thế nào?</summary><p>Gói cơ bản (chỉ tool) giá <b data-price>50.000đ</b>; gói Pro (tool và 323 prompt tiếng Việt viết sẵn) giá <b data-price-pro>99.000đ</b>. Cả hai thanh toán một lần. Sau khi thanh toán bạn nhận file cài đặt kèm hướng dẫn. Chi phí tài khoản Muse là riêng và theo gói Muse của bạn.</p></details>
         <details><summary>Tôi có cần tài khoản Muse không?</summary><p>Có. Muse Studio dùng chính tài khoản Muse của bạn để tạo video, bằng cookie đăng nhập bạn tự dán vào Cài đặt. Chi phí và hạn mức tạo video theo gói Muse của bạn.</p></details>
         <details><summary>Dữ liệu và cookie của tôi có bị gửi đi đâu không?</summary><p>Không. Mọi thứ, gồm cookie Muse, token YouTube và video, lưu trong thư mục <code>data</code> trên máy bạn. Tool chỉ liên lạc với Muse và YouTube, và chỉ nhận kết nối từ chính máy này.</p></details>
         <details><summary>Mỗi ngày đăng được bao nhiêu video?</summary><p>Mỗi project Google có 10.000 đơn vị API mỗi ngày, mỗi lần đăng tốn 1.600, tức khoảng 6 video mỗi ngày cho toàn bộ các kênh. Trang Kênh luôn hiện mức đã dùng.</p></details>
@@ -427,6 +441,7 @@ footer { padding: 56px 0 40px; color: var(--muted); font-size: .98rem; }
   document.querySelectorAll('.js-version').forEach(function (el) { el.textContent = cfg.version ? 'v' + cfg.version : ''; });
   document.querySelectorAll('.js-note').forEach(function (el) { el.textContent = cfg.note || ''; el.hidden = !cfg.note; });
   document.querySelectorAll('[data-price]').forEach(function (el) { if (cfg.price) el.textContent = cfg.price; });
+  document.querySelectorAll('[data-price-pro]').forEach(function (el) { if (cfg.proPrice) el.textContent = cfg.proPrice; });
   // Nút mua: ưu tiên link thanh toán, không có thì dùng link liên hệ, không có cả hai thì trỏ về khung giá
   document.querySelectorAll('.js-buy').forEach(function (el) {
     if (el.closest('.nav')) return;

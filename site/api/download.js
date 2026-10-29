@@ -18,10 +18,11 @@ module.exports = async (req, res) => {
       await lib.redis(['DECR', `dl:${code}`]);
       return res.status(429).json({ error: 'limit', message: `Bạn đã tải đủ ${limit} lần. Vui lòng liên hệ hỗ trợ nếu cần thêm.` });
     }
-    const file = await lib.readRelease();
+    const plan = lib.planOf(order.plan);
+    const file = await lib.readRelease(plan);
     await lib.statInc({ downloads: 1 });
     res.setHeader('Content-Type', 'application/zip');
-    res.setHeader('Content-Disposition', 'attachment; filename="muse-studio.zip"');
+    res.setHeader('Content-Disposition', `attachment; filename="${lib.planFile(plan)}"`);
     res.setHeader('Content-Length', String(file.length));
     return res.status(200).end(file);
   } catch (error) {

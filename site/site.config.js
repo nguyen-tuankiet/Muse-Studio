@@ -8,6 +8,9 @@ window.SITE = {
   bankCheckout: true,
   // Giá hiển thị trong cửa sổ thanh toán (số tiền thật lấy từ biến môi trường PRICE_VND trên máy chủ).
   priceVndLabel: '50.000đ',
+  // Gói Pro (tool + gói prompt). Số tiền thật lấy từ biến môi trường PRICE_PRO_VND trên máy chủ.
+  proPrice: '99.000đ',
+  proPriceVndLabel: '99.000đ',
   // Link thanh toán nơi khách trả tiền rồi nhận file (Lemon Squeezy, Gumroad, Payhip, Stripe Payment Link, PayPal...).
   // Để rỗng '' thì nút Mua ngay dùng contactUrl; không có cả hai thì nút hiện "Sắp mở bán".
   checkoutUrl: '',

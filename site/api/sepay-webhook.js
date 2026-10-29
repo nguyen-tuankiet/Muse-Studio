@@ -37,7 +37,7 @@ module.exports = async (req, res) => {
     Object.assign(matched, { status: 'paid', paidAt: new Date().toISOString(), txId, paidAmount: amount });
     delete matched.underpaid;
     await lib.saveOrder(matched, lib.ORDER_PAID_TTL);
-    await lib.statInc({ paid: 1, revenue: amount });
+    await lib.statInc(matched.plan === 'pro' ? { paid: 1, revenue: amount, paid_pro: 1, revenue_pro: amount } : { paid: 1, revenue: amount });
     if (await lib.sendDownloadEmail(matched)) { matched.emailed = true; await lib.saveOrder(matched, lib.ORDER_PAID_TTL); }
     return res.status(200).json({ success: true, matched: true, paid: true });
   } catch (error) {

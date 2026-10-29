@@ -1,7 +1,7 @@
 // GET /api/admin-stats?days=30 (cần đăng nhập quản trị): số liệu theo ngày, tổng, nguồn truy cập, quốc gia, thiết bị, đơn gần đây.
 const lib = require('./_lib');
 
-const COUNTERS = ['views', 'uniq', 'pricing_view', 'buy_click', 'demo_play', 'orders', 'paid', 'revenue', 'downloads'];
+const COUNTERS = ['views', 'uniq', 'pricing_view', 'buy_click', 'demo_play', 'orders', 'paid', 'revenue', 'downloads', 'orders_pro', 'paid_pro', 'revenue_pro'];
 const FIELD = { views: 'view' };
 
 module.exports = async (req, res) => {
@@ -38,7 +38,7 @@ module.exports = async (req, res) => {
     codes.forEach((code, index) => {
       const order = fetched[index * 2] ? JSON.parse(fetched[index * 2]) : null;
       if (!order) return;
-      recent.push({ code, email: order.email || '', status: order.status, amount: order.paidAmount || order.amount, createdAt: order.createdAt, paidAt: order.paidAt || null, downloads: Number(fetched[index * 2 + 1]) || 0, underpaid: Boolean(order.underpaid) });
+      recent.push({ code, email: order.email || '', status: order.status, plan: order.plan || 'basic', amount: order.paidAmount || order.amount, createdAt: order.createdAt, paidAt: order.paidAt || null, downloads: Number(fetched[index * 2 + 1]) || 0, underpaid: Boolean(order.underpaid) });
     });
 
     return res.status(200).json({ days, series, totals, referrers: top(groups.ref), countries: top(groups.geo), devices: top(groups.dev), recent, generatedAt: new Date().toISOString() });

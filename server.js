@@ -184,10 +184,18 @@ function body(req) {
     req.on('error', reject);
   });
 }
+// Mỗi dòng là một prompt (dấu phẩy trong prompt được giữ nguyên). Dòng đầu "prompt" là tiêu đề cột thì bỏ qua.
+// Dòng đặt trong ngoặc kép ("...") được đọc theo chuẩn CSV: "" là dấu ngoặc kép, phần sau ngoặc đóng bị bỏ.
 function parseCsv(text) {
   const lines = String(text || '').split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
   if (lines[0] && /^prompt(?:,|$)/i.test(lines[0])) lines.shift();
-  return lines.map((line) => line.split(',')[0].trim().replace(/^"|"$/g, '').replace(/""/g, '"')).filter(Boolean);
+  return lines.map((line) => {
+    if (line.startsWith('"')) {
+      const match = /^"((?:[^"]|"")*)"/.exec(line);
+      if (match) return match[1].replace(/""/g, '"').trim();
+    }
+    return line;
+  }).filter(Boolean);
 }
 
 

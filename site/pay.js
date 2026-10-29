@@ -5,7 +5,9 @@
   if (!cfg.bankCheckout) return;
 
   var KEY = 'muse_order';
-  var overlay; var box; var timer = null; var current = null;
+  var overlay; var box; var timer = null; var current = null; var plan = 'basic';
+  var PLANS = { basic: { title: 'Mua Muse Studio', file: 'Tải về Muse Studio (.zip)' }, pro: { title: 'Mua Muse Studio Pro (tool + prompt)', file: 'Tải về Muse Studio Pro (.zip)' } };
+  var priceOf = function (p) { return (p === 'pro' ? cfg.proPriceVndLabel || cfg.proPrice : cfg.priceVndLabel || cfg.price) || ''; };
   var money = function (n) { return Number(n).toLocaleString('vi-VN') + 'đ'; };
   var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
   var store = {
@@ -52,7 +54,7 @@
 
   function showForm(message) {
     clearTimeout(timer);
-    box.innerHTML = '<h3>Mua Muse Studio</h3><p class="pay-sub">Thanh toán <b>' + esc(cfg.priceVndLabel || cfg.price || '') + '</b> một lần bằng chuyển khoản ngân hàng. Chuyển xong, nút tải về hiện ra ngay trên trang này.</p>' +
+    box.innerHTML = '<h3>' + esc(PLANS[plan].title) + '</h3><p class="pay-sub">Thanh toán <b>' + esc(priceOf(plan)) + '</b> một lần bằng chuyển khoản ngân hàng. Chuyển xong, nút tải về hiện ra ngay trên trang này.</p>' +
       '<label class="pay-field" for="pay-email">Email nhận link tải (nên điền)</label><input class="pay-input" id="pay-email" type="email" autocomplete="email" placeholder="ten@email.com">' +
       '<p class="pay-hint">Link tải cũng được gửi qua email để bạn tải lại sau này. Có thể bỏ trống.</p>' +
       (message ? '<div class="pay-error">' + esc(message) + '</div>' : '') +
@@ -60,7 +62,7 @@
     var go = box.querySelector('#pay-go');
     go.addEventListener('click', function () {
       go.disabled = true; go.textContent = 'Đang tạo mã...';
-      api('/api/order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: box.querySelector('#pay-email').value }) }).then(function (res) {
+      api('/api/order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: box.querySelector('#pay-email').value, plan: plan }) }).then(function (res) {
         if (!res.ok) return showForm(res.data.message || 'Không tạo được đơn hàng, vui lòng thử lại.');
         store.set({ code: res.data.code, token: res.data.token });
         poll.started = Date.now();
@@ -96,8 +98,8 @@
     clearTimeout(timer);
     box.innerHTML = '<div class="pay-ok"><div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>' +
       '<h3 style="padding:0">Thanh toán thành công</h3><p class="pay-sub">Cảm ơn bạn! Mã đơn <b>' + esc(order.code) + '</b>.</p>' +
-      '<a class="btn btn-primary" href="' + esc(order.downloadUrl) + '" download>Tải về Muse Studio (.zip)</a>' +
-      '<p class="pay-hint">' + (order.emailed && order.email ? 'Link tải cũng đã được gửi tới ' + esc(order.email) + '. ' : '') + 'Link này lưu trên trình duyệt của bạn, tải được tối đa ' + esc(order.downloadLimit || '') + ' lần. Sau khi tải: giải nén rồi bấm đúp Start.bat.' + (cfg.supportEmail ? ' Cần hỗ trợ? Gửi email tới <a href="mailto:' + esc(cfg.supportEmail) + '?subject=' + encodeURIComponent('Hỗ trợ đơn ' + order.code) + '">' + esc(cfg.supportEmail) + '</a> kèm mã đơn.' : '') + '</p></div>';
+      '<a class="btn btn-primary" href="' + esc(order.downloadUrl) + '" download>' + esc(PLANS[order.plan === 'pro' ? 'pro' : 'basic'].file) + '</a>' +
+      '<p class="pay-hint">' + (order.emailed && order.email ? 'Link tải cũng đã được gửi tới ' + esc(order.email) + '. ' : '') + 'Link này lưu trên trình duyệt của bạn, tải được tối đa ' + esc(order.downloadLimit || '') + ' lần. Sau khi tải: giải nén rồi bấm đúp Start.bat.' + (order.plan === 'pro' ? ' Gói prompt nằm trong thư mục Prompt-Pack (PDF hướng dẫn, file prompts, briefs).' : '') + (cfg.supportEmail ? ' Cần hỗ trợ? Gửi email tới <a href="mailto:' + esc(cfg.supportEmail) + '?subject=' + encodeURIComponent('Hỗ trợ đơn ' + order.code) + '">' + esc(cfg.supportEmail) + '</a> kèm mã đơn.' : '') + '</p></div>';
   }
 
   function poll(saved, first) {
@@ -120,7 +122,7 @@
   document.addEventListener('click', function (e) {
     var button = e.target.closest('.js-buy');
     if (!button) return;
-    e.preventDefault(); poll.started = Date.now(); open();
+    e.preventDefault(); plan = button.getAttribute('data-plan') === 'pro' ? 'pro' : 'basic'; poll.started = Date.now(); open();
   });
   // Link trong email: /?order=...&token=... mở thẳng đơn đó
   var params = new URLSearchParams(location.search);

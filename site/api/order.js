@@ -29,11 +29,12 @@ async function create(req, res) {
 
   let code; let tries = 0;
   do { code = lib.randomCode(); tries += 1; } while (tries < 5 && await lib.getOrder(code));
-  const order = { code, token: lib.randomToken(), email, amount: cfg.priceVnd, status: 'pending', createdAt: new Date().toISOString() };
+  const plan = lib.planOf(body.plan);
+  const order = { code, token: lib.randomToken(), email, plan, amount: lib.planPrice(plan, cfg), status: 'pending', createdAt: new Date().toISOString() };
   await lib.saveOrder(order, lib.ORDER_PENDING_TTL);
   await lib.redis(['LPUSH', 'orders:recent', code]).catch(() => {});
   await lib.redis(['LTRIM', 'orders:recent', '0', '199']).catch(() => {});
-  await lib.statInc({ orders: 1 });
+  await lib.statInc(plan === 'pro' ? { orders: 1, orders_pro: 1 } : { orders: 1 });
   return res.status(201).json(view(order, cfg));
 }
 
@@ -45,7 +46,7 @@ async function status(req, res) {
 }
 
 function view(order, cfg) {
-  const out = { code: order.code, token: order.token, status: order.status, amount: order.amount, email: order.email || '' };
+  const out = { code: order.code, token: order.token, status: order.status, plan: order.plan || 'basic', amount: order.amount, email: order.email || '' };
   if (order.status === 'pending') {
     out.bank = { name: cfg.bankName, account: cfg.bankAccount, holder: cfg.bankHolder };
     out.content = order.code;

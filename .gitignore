@@ -24,3 +24,6 @@ site/dist/
 
 # File bản cài để bán (tạo bằng node site/build.mjs --zip)
 site/release/
+
+# Gói prompt bán riêng (nằm trong repo riêng tư muse, KHÔNG đưa lên repo công khai)
+prompt-pack/

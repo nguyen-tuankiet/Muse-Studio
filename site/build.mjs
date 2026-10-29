@@ -32,9 +32,24 @@ if (process.argv.includes('--zip')) {
   const release = path.join(site, 'release');
   fs.mkdirSync(release, { recursive: true });
   const zip = path.join(release, 'muse-studio.zip');
-  execFileSync('git', ['archive', '--format=zip', '--prefix=MuseStudio/', '-o', zip, 'HEAD', '--', '.', ':(exclude)docs', ':(exclude)site'], { cwd: root, stdio: 'inherit' });
+  execFileSync('git', ['archive', '--format=zip', '--prefix=MuseStudio/', '-o', zip, 'HEAD', '--', '.', ':(exclude)docs', ':(exclude)site', ':(exclude)prompt-pack'], { cwd: root, stdio: 'inherit' });
+  // Gói Pro: bản cài + thư mục Prompt-Pack (PDF, prompts, briefs). Cần chạy trước: node prompt-pack/build.mjs
+  const packDist = path.join(root, 'prompt-pack', 'dist');
+  if (fs.existsSync(path.join(packDist, 'Muse-Studio-Prompt-Pack.pdf'))) {
+    const tar = process.platform === 'win32' ? path.join(process.env.SystemRoot || 'C:/Windows', 'System32', 'tar.exe') : 'tar'; // bsdtar biết cả đọc lẫn tạo zip
+    const stage = path.join(release, 'stage');
+    fs.rmSync(stage, { recursive: true, force: true });
+    fs.mkdirSync(stage, { recursive: true });
+    execFileSync(tar, ['-xf', 'muse-studio.zip', '-C', 'stage'], { cwd: release, stdio: 'inherit' }); // đường dẫn tương đối: tar.exe của Windows không đọc được đường dẫn có dấu
+    fs.cpSync(packDist, path.join(stage, 'MuseStudio', 'Prompt-Pack'), { recursive: true });
+    const proZip = path.join(release, 'muse-studio-pro.zip');
+    fs.rmSync(proZip, { force: true });
+    execFileSync(tar, ['-a', '-cf', 'muse-studio-pro.zip', '-C', 'stage', 'MuseStudio'], { cwd: release, stdio: 'inherit' });
+    fs.rmSync(stage, { recursive: true, force: true });
+    zipInfo += `\n  file gói Pro: ${proZip} (${(fs.statSync(proZip).size / 1048576).toFixed(1)} MB)`;
+  } else zipInfo += '\n  (chưa có prompt-pack/dist nên chưa tạo gói Pro: chạy node prompt-pack/build.mjs rồi build lại)';
   const sha = crypto.createHash('sha256').update(fs.readFileSync(zip)).digest('hex');
-  zipInfo = `\n  file bản cài: ${zip} (${(fs.statSync(zip).size / 1048576).toFixed(1)} MB)\n  SHA-256: ${sha}`;
+  zipInfo = zipInfo + `\n  file bản cài: ${zip} (${(fs.statSync(zip).size / 1048576).toFixed(1)} MB)\n  SHA-256: ${sha}`;
 }
 // Đồng bộ số phiên bản vào cấu hình trong dist
 const cfgFile = path.join(dist, 'site.config.js');

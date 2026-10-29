@@ -57,6 +57,8 @@ Vào dự án `muse-studio-landing` trên Vercel → **Settings → Environment 
 | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | từ bước 2 | có |
 | `RELEASE_REPO` | `tên-github/muse-studio-release` | có |
 | `GITHUB_TOKEN` | token từ bước 3.4 | có |
+| `PRICE_PRO_VND` | giá gói Pro (tool + prompt), ví dụ `99000` | mặc định 99000 |
+| `RELEASE_PRO_PATH` | tên file gói Pro trong repo, mặc định `muse-studio-pro.zip` | không |
 | `RELEASE_PATH` | tên file trong repo, mặc định `muse-studio.zip` | không |
 | `DOWNLOAD_LIMIT` | số lần tải tối đa mỗi đơn, mặc định `5` | không |
 | `SITE_URL` | địa chỉ trang, ví dụ `https://muse-studio.vercel.app` | khi gửi email |
@@ -123,6 +125,7 @@ node site/dev.mjs              # mở http://127.0.0.1:3700 với dữ liệu gi
 ## Giới hạn cần biết
 
 - Mã đơn và token là thứ duy nhất chứng minh đã mua: ai có link tải thì tải được (tối đa `DOWNLOAD_LIMIT` lần). Không thể chặn tuyệt đối việc khách chia sẻ file sau khi tải.
-- Số tiền khớp theo đồng Việt Nam. Giá bán do bạn đặt qua `PRICE_VND` (hiện 50.000đ); nhớ sửa cả `price` và `priceVndLabel` trong `site/site.config.js` cho khớp.
+- Số tiền khớp theo đồng Việt Nam. Giá bán do bạn đặt qua `PRICE_VND` (hiện 50.000đ); nhớ sửa cả `price` và `priceVndLabel` trong `site/site.config.js` cho khớp. Gói Pro: `PRICE_PRO_VND` (hiện 99.000đ) và `proPrice`, `proPriceVndLabel`.
+- **Gói Pro (tool + prompt):** chạy `node prompt-pack/build.mjs` rồi `node site/build.mjs --zip`; được hai file trong `site/release/`: `muse-studio.zip` và `muse-studio-pro.zip`. Đưa cả hai vào repo release riêng tư, rồi thêm biến `PRICE_PRO_VND` trên Vercel. Số tiền do máy chủ quyết định theo gói, khách không sửa được trên trình duyệt.
 - Mã QR do dịch vụ vietqr.app tạo. Nếu dịch vụ đó ngừng, trang báo "Không tải được mã QR" và khách vẫn chuyển khoản theo thông tin hiển thị. Có thể đổi sang dịch vụ khác bằng biến `QR_BASE`.
 - Gói miễn phí của Vercel (Hobby) theo điều khoản dành cho dùng cá nhân, phi thương mại. Bán hàng thì nên xem lại điều khoản hoặc dùng gói trả phí/nền tảng khác.

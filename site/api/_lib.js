@@ -8,6 +8,7 @@ const env = (name, fallback = '') => process.env[name] || fallback;
 function settings() {
   return {
     priceVnd: Number(env('PRICE_VND', '50000')),
+    proPriceVnd: Number(env('PRICE_PRO_VND', '99000')),
     bankName: env('BANK_NAME', 'BIDV'),
     bankAccount: env('BANK_ACCOUNT'),
     bankHolder: env('BANK_HOLDER'),
@@ -72,6 +73,11 @@ async function pipeline(commands) {
   return data.map((item) => { if (item.error) throw new Error(`Redis lỗi: ${item.error}`); return item.result; });
 }
 
+// Hai gói: basic (chỉ tool) và pro (tool + gói prompt). Số tiền luôn do máy chủ quyết định, không nhận từ trình duyệt.
+const planOf = (value) => (value === 'pro' ? 'pro' : 'basic');
+const planPrice = (plan, cfg = settings()) => (plan === 'pro' ? cfg.proPriceVnd : cfg.priceVnd);
+const planFile = (plan) => (plan === 'pro' ? 'muse-studio-pro.zip' : 'muse-studio.zip');
+
 const ORDER_PENDING_TTL = 60 * 60 * 24 * 2; // đơn chưa trả tiền giữ 2 ngày
 const ORDER_PAID_TTL = 60 * 60 * 24 * 90; // đơn đã trả giữ 90 ngày để khách tải lại
 async function getOrder(code) {
@@ -132,12 +138,13 @@ const adminCookie = (req, value, maxAge) => {
 };
 
 // ---------------------------------------------------------------- file bản cài (giữ riêng tư, không nằm trong trang)
-async function readRelease() {
-  const local = env('RELEASE_FILE');
+async function readRelease(plan = 'basic') {
+  const pro = plan === 'pro';
+  const local = env(pro ? 'RELEASE_PRO_FILE' : 'RELEASE_FILE');
   if (local) return fs.readFileSync(local);
   const repo = env('RELEASE_REPO'); const token = env('GITHUB_TOKEN');
   if (!repo || !token) throw new Error('Chưa cấu hình file bản cài (RELEASE_REPO và GITHUB_TOKEN).');
-  const ref = env('RELEASE_REF'); const file = env('RELEASE_PATH', 'muse-studio.zip');
+  const ref = env('RELEASE_REF'); const file = env(pro ? 'RELEASE_PRO_PATH' : 'RELEASE_PATH', planFile(plan));
   const response = await fetch(`https://api.github.com/repos/${repo}/contents/${file.split('/').map(encodeURIComponent).join('/')}${ref ? `?ref=${encodeURIComponent(ref)}` : ''}`, {
     headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github.raw+json', 'User-Agent': 'muse-studio-site', 'X-GitHub-Api-Version': '2022-11-28' },
   });
@@ -155,7 +162,7 @@ async function sendDownloadEmail(order) {
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST', headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from, to: [order.email], subject: 'Muse Studio: link tải về của bạn',
+        from, to: [order.email], subject: order.plan === 'pro' ? 'Muse Studio Pro (tool + prompt): link tải về của bạn' : 'Muse Studio: link tải về của bạn',
         html: `<p>Cảm ơn bạn đã mua Muse Studio. Mã đơn: <b>${order.code}</b>.</p><p><a href="${link}">Bấm vào đây để tải về</a> (tải tối đa ${settings().downloadLimit} lần). Hãy giữ kín link này.</p><p>Sau khi tải, giải nén rồi bấm đúp Start.bat. Hướng dẫn chi tiết nằm trong README.md.</p>${settings().supportEmail ? `<p>Cần hỗ trợ? Trả lời email này hoặc gửi tới <a href="mailto:${settings().supportEmail}">${settings().supportEmail}</a> kèm mã đơn.</p>` : ''}`,
       }),
     });
@@ -164,6 +171,6 @@ async function sendDownloadEmail(order) {
 }
 
 module.exports = {
-  env, settings, redis, pipeline, getOrder, saveOrder, ORDER_PENDING_TTL, ORDER_PAID_TTL, STAT_TTL, dayKey, statInc, isBot, deviceOf,
+  env, settings, planOf, planPrice, planFile, redis, pipeline, getOrder, saveOrder, ORDER_PENDING_TTL, ORDER_PAID_TTL, STAT_TTL, dayKey, statInc, isBot, deviceOf,
   safeEqual, clientIp, randomCode, randomToken, noStore, parseBody, findCodes, adminToken, isAdmin, adminCookie, ADMIN_COOKIE, readRelease, sendDownloadEmail, memory,
 };
